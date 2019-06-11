@@ -14,6 +14,7 @@
 
 ### 必須
 
+- imagemagick
 - python3 >= 3.7
   - numpy
   - matplotlib
