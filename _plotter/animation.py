@@ -60,7 +60,7 @@ class Visualizer:
             yield f.read()
 
     def line_to_state(self, line):
-        # s = [x, xdot, theta, thetadot]
+        # s = [x, theta, xdot, thetadot]
         return list(map(float, line.strip().split(",")))
 
     def draw_cart(self, s):
@@ -75,7 +75,7 @@ class Visualizer:
         self.ax.vlines(right, bottom, top)
 
     def draw_pole(self, s):
-        x, theta = s[0], s[2]
+        x, theta = s[0], s[1]
 
         axis_x = x
         axis_y = 0
@@ -85,7 +85,7 @@ class Visualizer:
         self.ax.plot([axis_x, tip_x], [axis_y, tip_y])
 
     def write_info(self, s):
-        x, xdot, theta, thetadot = s
+        x, theta, xdot, thetadot = s
         self.ax.text(*self.text_time_pos, f"time[s] = {self.time}")
         self.ax.text(*self.text_x_pos, f"x[m] ={x}")
         self.ax.text(*self.text_xdot_pos, f"xdot[m/s] ={xdot}")
