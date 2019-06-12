@@ -24,10 +24,8 @@ def read_desc(fname):
 
 
 def read_data(fname):
-    data = []
     with open(fname) as f:
-        data.append(f.read())
-    return data
+        return list(map(float, f.read().split()))
 
 
 def plot(data, desc):
