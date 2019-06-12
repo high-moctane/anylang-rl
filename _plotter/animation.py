@@ -31,12 +31,14 @@ class Visualizer:
         self.time = 0.0
 
         self.fig, self.ax = plt.subplots()
+        self.lines = self.readlines()
 
     def make_animation(self):
         self.ani = animation.FuncAnimation(
             self.fig,
             self.update,
-            interval=int(self.tick * 1000)
+            interval=int(self.tick * 1000),
+            frames=len(self.lines)-1  # 読み込みの最後は空行なので -1 する
         )
 
     def save(self, fname):
@@ -44,7 +46,7 @@ class Visualizer:
 
     def update(self, *args):
         self.init_axes()
-        s = self.line_to_state(self.readline())
+        s = self.line_to_state(self.line())
         self.draw_cart(s)
         self.draw_pole(s)
         self.write_info(s)
@@ -52,12 +54,18 @@ class Visualizer:
 
     def init_axes(self):
         self.ax.clear()
-        self.ax.xlim(*self.xlim)
-        self.ax.ylim(*self.ylim)
+        self.ax.set_xlim(*self.xlim)
+        self.ax.set_ylim(*self.ylim)
+        self.ax.set_aspect("equal")
 
-    def readline(self):
+    def readlines(self):
         with open(self.data_fname) as f:
-            yield f.read()
+            return f.readlines()
+
+    def line(self):
+        line = self.lines[0]
+        self.lines = self.lines[1:]
+        return line
 
     def line_to_state(self, line):
         # s = [x, theta, xdot, thetadot]
