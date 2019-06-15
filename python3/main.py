@@ -9,7 +9,7 @@ class CartPoleEnv:
         self.M = 1.0  # カートの質量
         self.m = 0.1  # ポールの質量
         self.l = 0.5  # pole の半分の長さ
-        self.action_range = 50.  # -10. <= a <= 10.
+        self.action_range = 10.  # -10. <= a <= 10.
         self.fps = 50  # frames per sec
         self.tau = 1 / self.fps  # 制御周期
 
@@ -23,7 +23,7 @@ class CartPoleEnv:
 
     def reset_state(self):
         # s = (x, theta, xdot, thetadot)
-        self.s = [.0, -pi, .0, .0]
+        self.s = [.0, 0, .0, .0]
 
     def step(self, u):
         """入力 u を受け取る"""
@@ -35,13 +35,14 @@ class CartPoleEnv:
         return self.s
 
     def reward(self):
-        if abs(self.s[0]) > 2:
-            return -10
-        elif abs(self.s[2]) > 3:
-            return -10
-        elif abs(self.s[3]) > 8:
-            return -10
-        return cos(self.s[1])
+        x, theta, xdot, thetadot = self.s
+        if abs(thetadot) > 15:
+            return -2
+        elif abs(x) > 1:
+            return -2
+        if abs(theta) < 0.5:
+            return 2
+        return cos(theta)
 
     def _state_equation(self, s, u, dt):
         """状態 s で力 u を加えたときの dt 時間後の状態方程式を計算する"""
@@ -76,6 +77,7 @@ class CartPoleEnv:
         s3 = self._euler_solve(s, k3, dt)
         k4 = self._state_equation(s3, u, dt)
 
+        # FIXME: ここ self.tau じゃなくね？？
         for i in range(len(self.s)):
             self.s[i] = s[i] + \
                 (k1[i] + 2*k2[i] + 2 * k3[i] + k4[i]) * self.tau / 6
@@ -96,11 +98,11 @@ class Agent:
         self.alpha = 0.1  # 学習率
         self.gamma = 0.99  # 割引率
         self.eps = 0.1  # ランダムに探索する割合
-        self.init_q = 100  # Q 値の初期値
-        self.actions = [-50., .0, 50.]  # 行動の候補
+        self.init_q = 10  # Q 値の初期値
+        self.actions = [-10., .0, 10.]  # 行動の候補
 
         # 状態分割の下限と上限
-        self.x_limits = [-2, 2]
+        self.x_limits = [-1, 1]
         self.theta_limits = [-pi, pi]
         self.xdot_limits = [-2, 2]
         self.thetadot_limits = [-8, 8]
@@ -178,7 +180,7 @@ class Experiment:
         self.env = CartPoleEnv()
         self.agent = Agent()
 
-        self.episodes_num = 100000
+        self.episodes_num = 10000
         self.steps_num = self.env.fps * 10
 
         self.returns_hist = [.0 for _ in range(self.episodes_num)]

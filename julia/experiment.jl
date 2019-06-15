@@ -3,7 +3,7 @@ module Experiment
 include("cartpoleenv.jl")
 include("agent.jl")
 
-const episodesnum = 10000
+const episodesnum = 100000
 const stepsnum = Env.fps * 10
 
 struct History

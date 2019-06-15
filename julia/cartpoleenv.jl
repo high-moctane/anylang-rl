@@ -13,7 +13,7 @@ const τ = 1 / fps
 
 # 最初の状態
 # [x, theta, xdot, thetadot]
-const initstate = [.0, .0, .0, .0]
+const initstate = [.0, -pi, .0, .0]
 
 # あとの計算で使う
 const ml = m * l
@@ -34,7 +34,17 @@ end
 function reward(s)
     # TODO: あとでいい感じの関数にする
     x, θ, xdot, θdot = s
-    cos(θ)
+    if abs(θdot) > 5.0
+        return -2.0
+    elseif abs(x) > 1.5
+        return -2.0
+    end
+
+    c = cos(θ)
+    if c > 0.8
+        return 2.0
+    end
+    return c
 end
 
 # 状態 s のとき力 u を加えたときの dt 時間後の微分
@@ -43,7 +53,7 @@ function stateequation(s, u, dt)
     sinθ = sin(θ)
     cosθ = cos(θ)
 
-    xddot = (4u / 3 + 4ml*(θdot^2)sinθ / 3 - m * g * sin(2θ) / 2) / (4mass - m*(cosθ^2))
+    xddot = (4u / 3 + 4ml * (θdot^2)sinθ / 3 - m * g * sin(2θ) / 2) / (4mass - m * (cosθ^2))
     θddot = (mass * g * sinθ - ml * (θdot^2) * sinθ * cosθ - u * cosθ) /
         (4mass * l / 3 - ml * (cosθ^2))
 

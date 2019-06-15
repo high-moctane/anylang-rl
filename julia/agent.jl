@@ -4,15 +4,15 @@ export QTable, newqtable, action, learn!
 
 const α = 0.1  # 学習率
 const γ = 0.99  # 割引率
-const ϵ = 0.1  #ランダムに探索する割合
+const ϵ = 0.01  #ランダムに探索する割合
 const initq = 10  # Q-value の初期値
-const actions = [-100., .0, 100.]  # 行動の候補
+const actions = [-10., .0, 10.]  # 行動の候補
 
 # 状態分割の下限と上限
-const xlimits = [-1.0, 1.0]
+const xlimits = [-2.0, 2.0]
 const thetalimits = [-pi, pi]
 const xdotlimits = [-2.0, 2.0]
-const thetadotlimits = [-10.0, 10.0]
+const thetadotlimits = [-12.0, 12.0]
 
 # 状態の分割数
 const xnum = 10
