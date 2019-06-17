@@ -3,7 +3,7 @@ module Experiment
 include("cartpoleenv.jl")
 include("agent.jl")
 
-const episodesnum = 100000
+const episodesnum = 10000
 const stepsnum = Env.fps * 10
 
 struct History
@@ -22,19 +22,19 @@ function run()
     hist = newhistory()
 
     for episode = 1:episodesnum
-        returns = oneepisode(qtable, hist)
+        returns = oneepisode(Agent.defaultparams, qtable, hist)
         hist.returns[episode] = returns
     end
-    test(qtable, hist)
+    test(Agent.defaulttestparams, qtable, hist)
 
     qtable, hist
 end
 
-function test(qtable, hist)
-    oneepisode(qtable, hist, savestates = true)
+function test(agentparams, qtable, hist)
+    oneepisode(agentparams, qtable, hist, savestates = true)
 end
 
-function oneepisode(qtable, hist; savestates = false)
+function oneepisode(agentparams, qtable, hist; savestates = false)
     returns = 0.0
 
     s = Env.newstate()
@@ -45,12 +45,12 @@ function oneepisode(qtable, hist; savestates = false)
             hist.states[step] = s
         end
 
-        anext = Agent.action(qtable, s)
+        anext = Agent.action(agentparams, qtable, s)
         snext = Env.step(s, anext)
         r = Env.reward(s)
         returns += r
         if step > 1
-            Agent.learn!(qtable, s, a, r, snext, anext)
+            Agent.learn!(agentparams, qtable, s, a, r, snext, anext)
         end
         s = snext
         a = anext
