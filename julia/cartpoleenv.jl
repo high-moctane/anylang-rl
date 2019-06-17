@@ -13,7 +13,7 @@ const τ = 1 / fps
 
 # 最初の状態
 # [x, theta, xdot, thetadot]
-const initstate = [.0, -pi, .0, .0]
+const initstate = [.0, .0, .0, .0]
 
 # あとの計算で使う
 const ml = m * l
@@ -36,12 +36,12 @@ function reward(s)
     x, θ, xdot, θdot = s
     if abs(θdot) > 5.0
         return -2.0
-    elseif abs(x) > 1.5
+    elseif abs(x) > 1.0
         return -2.0
     end
 
     c = cos(θ)
-    if c > 0.8
+    if c > 0.85
         return 2.0
     end
     return c

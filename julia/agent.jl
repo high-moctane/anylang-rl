@@ -2,20 +2,20 @@ module Agent
 
 export defaultparams, defaulttestparams ,newqtable, action, learn!
 
-const initq = 1000.0  # Q-value の初期値
-const actions = [-10., .0, 10.]  # 行動の候補
+const initq = 10000.0  # Q-value の初期値
+const actions = [-10., 10.]  # 行動の候補
 
 # 状態分割の下限と上限
-const xlimits = [-2.0, 2.0]
+const xlimits = [-1.5, 1.5]
 const thetalimits = [-pi, pi]
-const xdotlimits = [-2.0, 2.0]
-const thetadotlimits = [-12.0, 12.0]
+const xdotlimits = [-1.5, 1.5]
+const thetadotlimits = [-10.0, 10.0]
 
 # 状態の分割数
 const xnum = 10
-const thetanum = 36
+const thetanum = 120
 const xdotnum = 10
-const thetadotnum = 10
+const thetadotnum = 50
 
 # 状態分割の bins を生成
 const xbins = range(xlimits..., length = xnum-1)
@@ -30,8 +30,8 @@ struct Params
     ϵ ::Float64  #ランダムに探索する割合
 end
 
-const defaultparams = Params(0.1, 0.99, 0.1)
-const defaulttestparams = Params(0.0, 0.99, 0.0)
+const defaultparams = Params(0.01, 0.999, 0.01)
+const defaulttestparams = Params(0.0, 0.999, 0.0)
 
 function newqtable()
     qtable = zeros(xnum, thetanum, xdotnum, thetadotnum, length(actions))
