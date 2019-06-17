@@ -27,11 +27,10 @@ const thetadotbins = range(thetadotlimits..., length = thetadotnum-1)
 struct Params
     α::Float64  # 学習率
     γ::Float64  # 割引率
-    ϵ ::Float64  #ランダムに探索する割合
 end
 
-const defaultparams = Params(0.01, 0.999, 0.01)
-const defaulttestparams = Params(0.0, 0.999, 0.0)
+const defaultparams = Params(0.01, 0.999)
+const defaulttestparams = Params(0.0, 0.999)
 
 function newqtable()
     qtable = zeros(xnum, thetanum, xdotnum, thetadotnum, length(actions))
@@ -39,12 +38,22 @@ function newqtable()
     qtable
 end
 
-function action(params, qtable, s)
-    if rand() < params.ϵ
-        return rand(actions)
+function action(temp, qtable, s)
+    qs = qtable[digitizeall(s)..., :]
+    boltzmann = [exp(q/temp/initq) for q in qs]
+    probability = boltzmann / sum(boltzmann)
+    bin = zeros(length(probability)-1)
+    # なんかいい感じの左畳み込みないかなあ
+    for (i, prob) = enumerate(probability)
+        if i == 1
+            bin[i] = probability[1]
+            continue
+        elseif i == length(probability)
+            break
+        end
+        bin[i] = bin[i-1] + probability[i]
     end
-    ids = digitizeall(s)
-    maxidx = argmax(qtable[ids..., :])
+    maxidx = searchsortedfirst(bin, rand())
     return actions[maxidx]
 end
 

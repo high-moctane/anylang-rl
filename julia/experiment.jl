@@ -22,19 +22,20 @@ function run()
     hist = newhistory()
 
     for episode = 1:episodesnum
-        returns = oneepisode(Agent.defaultparams, qtable, hist)
+        temp = (episodesnum - episode) / episodesnum + 0.1
+        returns = oneepisode(Agent.defaultparams, temp, qtable, hist)
         hist.returns[episode] = returns
     end
-    test(Agent.defaulttestparams, qtable, hist)
+    test(Agent.defaulttestparams, 0.1, qtable, hist)
 
     qtable, hist
 end
 
-function test(agentparams, qtable, hist)
-    oneepisode(agentparams, qtable, hist, savestates = true)
+function test(agentparams, temp, qtable, hist)
+    oneepisode(agentparams, temp, qtable, hist, savestates = true)
 end
 
-function oneepisode(agentparams, qtable, hist; savestates = false)
+function oneepisode(agentparams, temp, qtable, hist; savestates = false)
     returns = 0.0
 
     s = Env.newstate()
@@ -45,7 +46,7 @@ function oneepisode(agentparams, qtable, hist; savestates = false)
             hist.states[step] = s
         end
 
-        anext = Agent.action(agentparams, qtable, s)
+        anext = Agent.action(temp, qtable, s)
         snext = Env.step(s, anext)
         r = Env.reward(s)
         returns += r
