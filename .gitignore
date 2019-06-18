@@ -4,6 +4,8 @@ description.txt
 returns.csv
 returns.png
 states.csv
+actions.csv
+rewards.csv
 
 # Python3
 __pycache__

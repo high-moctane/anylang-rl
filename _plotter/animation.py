@@ -5,13 +5,17 @@ import os.path as path
 import sys
 
 
-DATA_FNAME = "states.csv"
+STATES_FNAME = "states.csv"
+ACTIONS_FNAME = "actions.csv"
+REWARDS_FNAME = "rewards.csv"
 GIF_FNAME = "animation.gif"
 
 
 class Visualizer:
-    def __init__(self, data_fname):
-        self.data_fname = data_fname
+    def __init__(self, states_fname, actions_fname, rewards_fname):
+        self.states_fname = states_fname
+        self.actions_fname = actions_fname
+        self.rewards_fname = rewards_fname
 
         self.cart_size = [1.0, 0.5]
         self.pole_len = 0.5
@@ -27,18 +31,23 @@ class Visualizer:
         self.text_xdot_pos = [-2.8, 2.4]
         self.text_theta_pos = [-2.8, 2.2]
         self.text_thetadot_pos = [-2.8, 2.0]
+        self.text_action_pos = [-2.8, 1.4]
+        self.text_reward_pos = [-2.8, 1.2]
 
-        self.time = 0.0
+        self.step = 0
+        self.time = 0
 
         self.fig, self.ax = plt.subplots()
-        self.lines = self.readlines()
+        self.states = self.lines_to_state(self.readlines(self.states_fname))
+        self.actions = self.readlines(self.actions_fname)
+        self.rewards = self.readlines(self.rewards_fname)
 
     def make_animation(self):
         self.ani = animation.FuncAnimation(
             self.fig,
             self.update,
             interval=int(self.tick * 1000),
-            frames=len(self.lines)-1  # 読み込みの最後は空行なので -1 する
+            frames=len(self.states)-1  # 読み込みの最後は空行なので -1 する
         )
 
     def save(self, fname):
@@ -46,11 +55,14 @@ class Visualizer:
 
     def update(self, *args):
         self.init_axes()
-        s = self.line_to_state(self.line())
+        s = self.states[self.step]
+        a = self.actions[self.step]
+        r = self.rewards[self.step]
         self.draw_cart(s)
         self.draw_pole(s)
-        self.write_info(s)
+        self.write_info(s, a, r)
         self.time += self.tick
+        self.step += 1
 
     def init_axes(self):
         self.ax.clear()
@@ -58,18 +70,13 @@ class Visualizer:
         self.ax.set_ylim(*self.ylim)
         self.ax.set_aspect("equal")
 
-    def readlines(self):
-        with open(self.data_fname) as f:
+    def readlines(self, fname):
+        with open(fname) as f:
             return f.readlines()
 
-    def line(self):
-        line = self.lines[0]
-        self.lines = self.lines[1:]
-        return line
-
-    def line_to_state(self, line):
+    def lines_to_state(self, lines):
         # s = [x, theta, xdot, thetadot]
-        return list(map(float, line.strip().split(",")))
+        return [list(map(float, line.strip().split(","))) for line in lines]
 
     def draw_cart(self, s):
         left = s[0] - self.cart_size[0]/2
@@ -92,13 +99,15 @@ class Visualizer:
 
         self.ax.plot([axis_x, tip_x], [axis_y, tip_y])
 
-    def write_info(self, s):
+    def write_info(self, s, a, r):
         x, theta, xdot, thetadot = s
         self.ax.text(*self.text_time_pos, f"time[s] = {self.time}")
         self.ax.text(*self.text_x_pos, f"x[m] ={x}")
         self.ax.text(*self.text_xdot_pos, f"xdot[m/s] ={xdot}")
         self.ax.text(*self.text_theta_pos, f"theta[rad] = {theta}")
         self.ax.text(*self.text_thetadot_pos, f"thetadot[rad/s] = {thetadot}")
+        self.ax.text(*self.text_action_pos, f"a = {a}")
+        self.ax.text(*self.text_reward_pos, f"r = {r}")
 
 
 if __name__ == "__main__":
@@ -112,6 +121,10 @@ if __name__ == "__main__":
         print(f"No such directory: {lang_dir}", file=sys.stderr)
         sys.exit(1)
 
-    visualizer = Visualizer(path.join(lang_dir, DATA_FNAME))
+    visualizer = Visualizer(
+        path.join(lang_dir, STATES_FNAME),
+        path.join(lang_dir, ACTIONS_FNAME),
+        path.join(lang_dir, REWARDS_FNAME)
+    )
     visualizer.make_animation()
     visualizer.save(path.join(lang_dir, GIF_FNAME))

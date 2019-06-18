@@ -1,62 +1,66 @@
 module Experiment
 
-include("cartpoleenv.jl")
 include("agent.jl")
+include("cartpoleenv.jl")
 
 const episodesnum = 10000
 const stepsnum = Env.fps * 10
 
 struct History
-    returns::Vector{Float64}
     states::Vector{Env.State}
+    actions::Vector{Float64}
+    rewards::Vector{Float64}
 end
 
 function newhistory()
-    returns = Vector{Float64}(undef, episodesnum)
     states = Vector{Env.State}(undef, stepsnum)
-    History(returns, states)
+    actions = Vector{Float64}(undef, stepsnum)
+    rewards = Vector{Float64}(undef, stepsnum)
+    History(states, actions, rewards)
 end
 
 function run()
+    returns = Vector{Float64}(undef, episodesnum)
     qtable = Agent.newqtable()
-    hist = newhistory()
+    agentparams = Agent.defaultparams
 
     for episode = 1:episodesnum
-        returns = oneepisode(Agent.defaultparams, qtable, hist)
-        hist.returns[episode] = returns
+        hist = oneepisode(agentparams, qtable)
+        returns[episode] = sum(hist.rewards)
     end
-    test(Agent.defaulttestparams, qtable, hist)
 
-    qtable, hist
+    returns, qtable
 end
 
-function test(agentparams, qtable, hist)
-    oneepisode(agentparams, qtable, hist, savestates = true)
+function test(qtable)
+    hist = oneepisode(Agent.defaulttestparams, qtable)
+    hist, qtable
 end
 
-function oneepisode(agentparams, qtable, hist; savestates = false)
-    returns = 0.0
+function oneepisode(agentparams, qtable)
+    hist = newhistory()
 
     s = Env.newstate()
     a = 0.0
+    r = 0.0
 
     for step = 1:stepsnum
-        if savestates
-            hist.states[step] = s
-        end
+        hist.states[step] = s
+        hist.actions[step] = a
+        hist.rewards[step] = r
 
         anext = Agent.action(agentparams, qtable, s)
-        snext = Env.step(s, anext)
-        r = Env.reward(s)
-        returns += r
+        snext = Env.onestep(s, anext)
+        r = Env.reward(s, a)
         if step > 1
             Agent.learn!(agentparams, qtable, s, a, r, snext, anext)
         end
+
         s = snext
         a = anext
     end
 
-    returns
+    hist
 end
 
 end
