@@ -31,7 +31,7 @@ end
 
 function reward(s, a)
     x, θ, xdot, θdot = s
-    if abs(x) > 1.0
+    if abs(x) > 1.5
         return -2.0
     end
     cos(θ)
