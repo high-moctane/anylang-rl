@@ -1,6 +1,6 @@
-using LinearAlgebra
-
 module NGnet
+
+using LinearAlgebra
 
 struct RBF
     μ::Vector{Float64}
@@ -17,13 +17,13 @@ function newrbfs(bins...)
     # Note: あまり効率的ではなさそうだがどうせ1回しか実行されないので
     # これでよいということにする
     rbfs = []
-    for μ in newμs(bins...)
-        push!(RBF(μ, newinvΣ()))
+    for μ in newμs(bins)
+        push!(rbfs, RBF(μ, newinvΣ(bins)))
     end
     rbfs
 end
 
-function newμs(bins...)
+function newμs(bins)
     mus = []
     for elems in Iterators.product(bins...)
         push!(mus, collect(elems))
@@ -31,7 +31,7 @@ function newμs(bins...)
     mus
 end
 
-function newinvΣ(bins...)
+function newinvΣ(bins)
     # NOTE: これは bins が等間隔で並んでいることを前提としているなあ
     subs = [bin[2] - bin[1] for bin in bins]
     Σ = LinearAlgebra.Diagonal(subs)
