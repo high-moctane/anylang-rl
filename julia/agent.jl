@@ -1,70 +1,94 @@
-module Agent
+module AgentNGnet
 
-const initqvalue = 1000.0  # Q-value の初期値
-const actions = [-10.0, 10.0]  # 行動の候補
+include("ngnet.jl")
 
-# 状態分割の下限と上限
-const xlimits = [-1.5, 1.5]
-const thetalimits = [-pi, pi]
-const xdotlimits = [-2.0, 2.0]
-const thetadotlimits = [-10.0, 10.0]
+const μrange = [-10.0, 10.0]
+const σrange = [0.01, 3.0]
 
-# 状態の分割数
-const xnum = 4
-const thetanum = 90
-const xdotnum = 10
-const thetadotnum = 50
+# NGnet の bins を生成
+const xbins = range(-3.0, 3.0, length = 5)
+const thetabins = range(-pi, pi, length = 9)
+const xdotbins = range(-3.0, 3.0, length = 5)
+const thetadotbins = range(-10.0, 10.0, length = 7)
 
-# 状態分割の bins を生成
-const xbins = range(xlimits..., length = xnum - 1)
-const thetabins = range(thetalimits..., length = thetanum - 1)
-const xdotbins = range(xdotlimits..., length = xdotnum - 1)
-const thetadotbins = range(thetadotlimits..., length = thetadotnum - 1)
+const ngnet = NGnet.newrbfs(xbins, thetabins, xdotbins, thetadotbins)
 
-# 学習に使うパラメータ
-mutable struct Params
+mutable struct Agent
     α::Float64  # 学習率
     γ::Float64  # 割引率
-    ε::Float64  # ランダムに探索する割合
+    η_μ::Float64  # \mu の更新率
+    η_σ::Float64  # \sigma の更新率
+    ngnet::NGnet.RBFs
+    vweight::Vector{Float64}
+    μweight::Vector{Float64}
+    σweight::Vector{Float64}
 end
 
-const defaultparams = Params(0.01, 0.999, 0.01)
-const defaulttestparams = Params(0.0, 0.999, 0.01)
-
-
-function newqtable()
-    qtable = zeros(xnum, thetanum, xdotnum, thetadotnum, length(actions))
-    fill!(qtable, initqvalue)
-    qtable
+function newagent()
+    α = 0.01
+    γ = 0.99
+    η_μ = 0.01
+    η_σ = 0.01
+    ngnet = NGnet.newrbfs(xbins, thetabins, xdotbins, thetadotbins)
+    vweight = zeros(length(ngnet))
+    μweight = zeros(length(ngnet))
+    σweight = ones(length(ngnet)) * σrange[2]
+    Agent(α,
+        γ,
+        η_μ,
+        η_σ,
+        ngnet,
+        vweight,
+        μweight,
+        σweight)
 end
 
-function action(params, qtable, s)
-    if rand() < params.ε
-        return rand(actions)
+function newtestagent(agent)
+    Agent(0.0,
+        0.99,
+        0.0,
+        0.0,
+        agent.ngnet,
+        agent.vweight,
+        agent.μweight,
+        agent.σweight)
+end
+
+function action(agent, s)
+    μ = NGnet.value(agent.ngnet, s, agent.μweight)
+    μ = max(μrange[1], min(μrange[2], μ))
+    σ = NGnet.value(agent.ngnet, s, agent.σweight)
+    σ = max(σrange[1], min(σrange[2], σ))
+
+    a = μ + randn() * σ
+    max(μrange[1], min(μrange[2], a))
+end
+
+function learn!(agent, s0, a0, r, s1, a1)
+    s0bval = NGnet.bvalue(agent.ngnet, s0)
+    s1bval = NGnet.bvalue(agent.ngnet, s1)
+
+    td = r + agent.γ * NGnet.value(agent.vweight, s1bval) - NGnet.value(agent.vweight, s0bval)
+
+    # critic
+    agent.vweight += agent.α * td * s0bval
+
+    # actor
+    μ = NGnet.value(agent.μweight, s0bval)
+    σ = NGnet.value(agent.σweight, s0bval)
+
+    if td > 0.0
+        agent.μweight += agent.η_μ * (a0 - μ) * s0bval
+        if σ > σrange[1]
+            agent.σweight -= agent.η_σ * NGnet.value(agent.σweight, s0bval) * s0bval
+        end
+    elseif td == 0.0
+        # NOP
+    else
+        # if σ < σrange[2]
+        #     agent.σweight += agent.η_σ * NGnet.value(agent.σweight, s0bval) * s0bval
+        # end
     end
-    idx = digitizeall(s)
-    maxidx = argmax(qtable[idx..., :])
-    actions[maxidx]
-end
-
-function learn!(params, qtable, s0, a0, r, s1, a1)
-    s0idx = digitizeall(s0)
-    a0idx = findfirst(x->x == a0, actions)
-    s1idx = digitizeall(s1)
-    # a1idx = findfirst(x->x == a1, actions)
-
-    qtable[s0idx..., a0idx] =
-        (1 - params.α) * qtable[s0idx..., a0idx] +
-        params.α * (r + params.γ * maximum(qtable[s1idx..., :]))
-
-end
-
-function digitizeall(s)
-    xidx = searchsortedfirst(xbins, s[1])
-    thetaidx = searchsortedfirst(thetabins, s[2])
-    xdotidx = searchsortedfirst(xdotbins, s[3])
-    thetadotidx = searchsortedfirst(thetadotbins, s[4])
-    xidx, thetaidx, xdotidx, thetadotidx
 end
 
 end

@@ -31,10 +31,10 @@ end
 
 function reward(s, a)
     x, θ, xdot, θdot = s
-    if abs(x) > 1.5
+    if abs(x) > 2.0
         return -2.0
     end
-    cos(θ)
+    -abs(θ) + pi / 2
 end
 
 # 状態 s で力 u を加えたときの微分

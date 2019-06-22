@@ -8,7 +8,7 @@ struct RBF
 end
 
 function avalue(rbf, x)
-    exp((x - rbf.μ)*rbf.invΣ*(x - rbf.μ) / -2)
+    exp((x - rbf.μ)' * rbf.invΣ * (x - rbf.μ) / -2)
 end
 
 const RBFs = Vector{RBF}
@@ -45,6 +45,10 @@ end
 
 function value(rbfs, x, weight)
     sum(weight .* bvalue(rbfs, x))
+end
+
+function value(weight, bval)
+    sum(weight .* bval)
 end
 
 end

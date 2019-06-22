@@ -18,7 +18,7 @@ clean:
 images: returns.png animation.gif
 	@:
 
-states.csv actions.csv rewards.csv returns.csv: main.jl cartpoleenv.jl agent.jl experiment.jl
+states.csv actions.csv rewards.csv returns.csv: main.jl cartpoleenv.jl agent.jl experiment.jl ngnet.jl
 	make run
 
 description.txt:
