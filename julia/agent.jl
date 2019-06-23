@@ -7,7 +7,7 @@ const σrange = [0.01, 3.0]
 
 # NGnet の bins を生成
 const xbins = range(-3.0, 3.0, length = 5)
-const thetabins = range(-pi, pi, length = 9)
+const thetabins = range(-pi, pi, length = 7)
 const xdotbins = range(-3.0, 3.0, length = 5)
 const thetadotbins = range(-10.0, 10.0, length = 7)
 
@@ -64,7 +64,7 @@ function action(agent, s)
     max(μrange[1], min(μrange[2], a))
 end
 
-function learn!(agent, s0, a0, r, s1, a1)
+function learn!(agent, s0, a0, r, s1)
     s0bval = NGnet.bvalue(agent.ngnet, s0)
     s1bval = NGnet.bvalue(agent.ngnet, s1)
 

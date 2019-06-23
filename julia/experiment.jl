@@ -3,7 +3,7 @@ module Experiment
 include("agent.jl")
 include("cartpoleenv.jl")
 
-const episodesnum = 100
+const episodesnum = 10000
 const stepsnum = Env.fps * 10
 
 struct History
@@ -54,9 +54,7 @@ function oneepisode(agent)
         anext = AgentNGnet.action(agent, s)
         snext = Env.onestep(s, anext)
         r = Env.reward(snext, a)
-        if step > 1
-            AgentNGnet.learn!(agent, s, a, r, snext, anext)
-        end
+        AgentNGnet.learn!(agent, s, anext, r, snext)
 
         s = snext
         a = anext
