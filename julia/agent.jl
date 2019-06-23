@@ -1,6 +1,6 @@
 module Agent
 
-const initqvalue = 1000.0  # Q-value の初期値
+const initqvalue = 10000.0  # Q-value の初期値
 const actions = [-10.0, 10.0]  # 行動の候補
 
 # 状態分割の下限と上限
@@ -28,8 +28,8 @@ mutable struct Params
     ε::Float64  # ランダムに探索する割合
 end
 
-const defaultparams = Params(0.01, 0.999, 0.01)
-const defaulttestparams = Params(0.0, 0.999, 0.01)
+const defaultparams = Params(0.1, 0.999, 0.1)
+const defaulttestparams = Params(0.0, 0.999, 0.0)
 
 
 function newqtable()
@@ -47,11 +47,10 @@ function action(params, qtable, s)
     actions[maxidx]
 end
 
-function learn!(params, qtable, s0, a0, r, s1, a1)
+function learn!(params, qtable, s0, a0, r, s1)
     s0idx = digitizeall(s0)
     a0idx = findfirst(x->x == a0, actions)
     s1idx = digitizeall(s1)
-    # a1idx = findfirst(x->x == a1, actions)
 
     qtable[s0idx..., a0idx] =
         (1 - params.α) * qtable[s0idx..., a0idx] +

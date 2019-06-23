@@ -34,7 +34,7 @@ function reward(s, a)
     if abs(x) > 1.5
         return -2.0
     end
-    cos(θ)
+    -abs(θ) + pi / 2
 end
 
 # 状態 s で力 u を加えたときの微分
