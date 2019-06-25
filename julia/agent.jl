@@ -4,7 +4,7 @@ const initqvalue = 10000.0  # Q-value の初期値
 const actions = [-10.0, 10.0]  # 行動の候補
 
 # 状態分割の下限と上限
-const xlimits = [-1.5, 1.5]
+const xlimits = [-2.0, 2.0]
 const thetalimits = [-pi, pi]
 const xdotlimits = [-2.0, 2.0]
 const thetadotlimits = [-10.0, 10.0]

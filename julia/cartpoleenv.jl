@@ -31,7 +31,7 @@ end
 
 function reward(s, a)
     x, θ, xdot, θdot = s
-    if abs(x) > 1.5
+    if abs(x) > 2.0
         return -2.0
     end
     -abs(θ) + pi / 2
@@ -66,7 +66,7 @@ function rungekuttasolve(s, u, dt)
     k4 = differential(s3, u)
 
     snext = s + (k1 + 2k2 + 2k3 + k4) * dt / 6
-    snext[2] = normalizetheta(snext[2])
+    snext[2] = mod2pi(snext[2] + pi / 2) - pi / 2
     snext
 end
 

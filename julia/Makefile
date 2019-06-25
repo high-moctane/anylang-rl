@@ -4,7 +4,7 @@ build: description.txt
 	@:
 
 run:
-	julia main.jl
+	gtime julia main.jl
 
 clean:
 	rm -rf animation.gif

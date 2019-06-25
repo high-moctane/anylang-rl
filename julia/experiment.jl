@@ -3,7 +3,7 @@ module Experiment
 include("agent.jl")
 include("cartpoleenv.jl")
 
-const episodesnum = 100000
+const episodesnum = 20000000
 const stepsnum = Env.fps * 10
 
 struct History
@@ -25,6 +25,10 @@ function run()
     agentparams = Agent.defaultparams
 
     for episode = 1:episodesnum
+        if episode % (episodesnum // 10) == 0
+            println("episode = ", episode)
+        end
+
         hist = oneepisode(agentparams, qtable)
         returns[episode] = sum(hist.rewards)
     end
