@@ -1,3 +1,5 @@
+include $(PWD)/../include.mk
+
 .PHONY: build run clean images
 
 build: description.txt build_time.txt
@@ -21,13 +23,13 @@ images: returns.png animation.gif
 	@:
 
 states.csv actions.csv rewards.csv returns.csv run_time.txt: main.jl cartpoleenv.jl agent.jl experiment.jl
-	gtime julia main.jl 2> run_time.txt
+	$(TIME) julia main.jl 2> run_time.txt
 
 description.txt:
 	julia -v > description.txt
 
 build_time.txt:
-	gtime true 2> build_time.txt
+	$(TIME) true 2> build_time.txt
 
 animation.gif: states.csv actions.csv rewards.csv
 	python3 $(PWD)/../_plotter/animation.py $(PWD)
