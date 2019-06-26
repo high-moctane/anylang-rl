@@ -4,7 +4,7 @@ build: description.txt
 	@:
 
 run:
-	julia main.jl
+	gtime julia main.jl
 
 clean:
 	rm -rf animation.gif
@@ -18,7 +18,7 @@ clean:
 images: returns.png animation.gif
 	@:
 
-states.csv actions.csv rewards.csv returns.csv: main.jl cartpoleenv.jl agent.jl experiment.jl ngnet.jl
+states.csv actions.csv rewards.csv returns.csv: main.jl cartpoleenv.jl agent.jl experiment.jl
 	make run
 
 description.txt:

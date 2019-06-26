@@ -3,7 +3,7 @@ module Experiment
 include("agent.jl")
 include("cartpoleenv.jl")
 
-const episodesnum = 10000
+const episodesnum = 20000000
 const stepsnum = Env.fps * 10
 
 struct History
@@ -21,23 +21,27 @@ end
 
 function run()
     returns = Vector{Float64}(undef, episodesnum)
-    agent = AgentNGnet.newagent()
+    qtable = Agent.newqtable()
+    agentparams = Agent.defaultparams
 
     for episode = 1:episodesnum
-        hist = oneepisode(agent)
+        if episode % (episodesnum // 10) == 0
+            println("episode = ", episode)
+        end
+
+        hist = oneepisode(agentparams, qtable)
         returns[episode] = sum(hist.rewards)
     end
 
-    returns, agent
+    returns, qtable
 end
 
-function test(agent)
-    testagent = AgentNGnet.newtestagent(agent)
-    hist = oneepisode(testagent)
-    hist, testagent
+function test(qtable)
+    hist = oneepisode(Agent.defaulttestparams, qtable)
+    hist, qtable
 end
 
-function oneepisode(agent)
+function oneepisode(agentparams, qtable)
     hist = newhistory()
 
     s = Env.newstate()
@@ -51,10 +55,10 @@ function oneepisode(agent)
         hist.actions[step] = a
         hist.rewards[step] = r
 
-        anext = AgentNGnet.action(agent, s)
+        anext = Agent.action(agentparams, qtable, s)
         snext = Env.onestep(s, anext)
         r = Env.reward(snext, a)
-        AgentNGnet.learn!(agent, s, anext, r, snext)
+        Agent.learn!(agentparams, qtable, s, anext, r, snext)
 
         s = snext
         a = anext
