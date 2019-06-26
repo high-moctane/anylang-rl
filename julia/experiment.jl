@@ -25,10 +25,6 @@ function run()
     agentparams = Agent.defaultparams
 
     for episode = 1:episodesnum
-        if episode % (episodesnum // 10) == 0
-            println("episode = ", episode)
-        end
-
         hist = oneepisode(agentparams, qtable)
         returns[episode] = sum(hist.rewards)
     end

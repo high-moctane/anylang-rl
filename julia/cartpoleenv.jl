@@ -70,13 +70,4 @@ function rungekuttasolve(s, u, dt)
     snext
 end
 
-function normalizetheta(theta)
-    if theta >= pi
-        return theta - 2pi
-    elseif theta < -pi
-        return theta + 2pi
-    end
-    theta
-end
-
 end
