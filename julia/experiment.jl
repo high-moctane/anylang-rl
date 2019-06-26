@@ -50,7 +50,7 @@ function oneepisode(agentparams, qtable)
         hist.rewards[step] = r
 
         a = Agent.action(agentparams, qtable, s)
-        snext = Env.onestep(s, anext)
+        snext = Env.onestep(s, a)
         r = Env.reward(snext, a)
         Agent.learn!(agentparams, qtable, s, a, r, snext)
 
