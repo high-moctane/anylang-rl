@@ -14,7 +14,9 @@
 
 ### 必須
 
+- time コマンド
 - imagemagick
+- julia
 - python3 >= 3.7
   - numpy
   - matplotlib
