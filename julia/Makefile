@@ -2,7 +2,7 @@ include $(PWD)/../include.mk
 
 .PHONY: build run clean images
 
-build: description.txt build_time.txt
+build: description.txt lines_num.txt build_time.txt
 	@:
 
 run: build_time.txt run_time.txt
@@ -17,6 +17,7 @@ clean:
 	rm -rf states.csv
 	rm -rf description.txt
 	rm -rf build_time.txt
+	rm -rf lines_num.txt
 	rm -rf run_time.txt
 
 images: returns.png animation.gif
@@ -27,6 +28,9 @@ states.csv actions.csv rewards.csv returns.csv run_time.txt: main.jl cartpoleenv
 
 description.txt:
 	julia -v > description.txt
+
+lines_num.txt: *.jl
+	wc *.jl > lines_num.txt
 
 build_time.txt:
 	$(TIME) true 2> build_time.txt
