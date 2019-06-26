@@ -43,21 +43,18 @@ function oneepisode(agentparams, qtable)
     s = Env.newstate()
     a = 0.0
     r = 0.0
-    snext = Env.newstate()
-    anext = 0.0
 
     for step = 1:stepsnum
         hist.states[step] = s
         hist.actions[step] = a
         hist.rewards[step] = r
 
-        anext = Agent.action(agentparams, qtable, s)
+        a = Agent.action(agentparams, qtable, s)
         snext = Env.onestep(s, anext)
         r = Env.reward(snext, a)
-        Agent.learn!(agentparams, qtable, s, anext, r, snext)
+        Agent.learn!(agentparams, qtable, s, a, r, snext)
 
         s = snext
-        a = anext
     end
 
     hist
