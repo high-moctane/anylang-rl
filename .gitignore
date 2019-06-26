@@ -1,6 +1,8 @@
 # 実験結果ファイル
 animation.gif
 description.txt
+build_time.txt
+run_time.txt
 returns.csv
 returns.png
 states.csv

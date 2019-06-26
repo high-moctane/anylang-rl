@@ -1,10 +1,10 @@
 .PHONY: build run clean images
 
-build: description.txt
+build: description.txt build_time.txt
 	@:
 
-run:
-	gtime julia main.jl
+run: build_time.txt run_time.txt
+	@:
 
 clean:
 	rm -rf animation.gif
@@ -14,15 +14,20 @@ clean:
 	rm -rf rewards.csv
 	rm -rf states.csv
 	rm -rf description.txt
+	rm -rf build_time.txt
+	rm -rf run_time.txt
 
 images: returns.png animation.gif
 	@:
 
-states.csv actions.csv rewards.csv returns.csv: main.jl cartpoleenv.jl agent.jl experiment.jl
-	make run
+states.csv actions.csv rewards.csv returns.csv run_time.txt: main.jl cartpoleenv.jl agent.jl experiment.jl
+	gtime julia main.jl 2> run_time.txt
 
 description.txt:
 	julia -v > description.txt
+
+build_time.txt:
+	gtime true 2> build_time.txt
 
 animation.gif: states.csv actions.csv rewards.csv
 	python3 $(PWD)/../_plotter/animation.py $(PWD)
