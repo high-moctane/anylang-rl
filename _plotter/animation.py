@@ -60,6 +60,7 @@ class Visualizer:
         r = self.rewards[self.step]
         self.draw_cart(s)
         self.draw_pole(s)
+        self.draw_action_arrow(s, a)
         self.write_info(s, a, r)
         self.time += self.tick
         self.step += 1
@@ -98,6 +99,21 @@ class Visualizer:
         tip_y = math.cos(theta)
 
         self.ax.plot([axis_x, tip_x], [axis_y, tip_y])
+
+    def draw_action_arrow(self, s, a):
+        x = s[0]
+        a = float(a)
+        if a == 0:
+            return
+        elif a > 0:
+            start = [x + self.cart_size[0] / 2, 0]
+            end = [start[0] + a / 10, 0]
+        else:
+            start = [x - self.cart_size[0] / 2, 0]
+            end = [start[0] + a / 10, 0]
+
+        self.ax.annotate("", xy=end, xytext=start,
+                         arrowprops=dict(arrowstyle="-|>", facecolor="orange", edgecolor="orange"))
 
     def write_info(self, s, a, r):
         x, theta, xdot, thetadot = s
