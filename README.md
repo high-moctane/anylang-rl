@@ -16,14 +16,14 @@
 
 - time コマンド
 - imagemagick
-- julia
 - python3 >= 3.7
   - numpy
   - matplotlib
 
 ### 任意
 
-(TODO)
+- julia
+- go
 
 ## 実験について
 
