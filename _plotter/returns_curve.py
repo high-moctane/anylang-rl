@@ -29,11 +29,20 @@ def read_data(fname):
 
 
 def plot(data, desc):
-    x = np.arange(1, len(data)+1)
-    plt.plot(x, data)
+    draw(data)
+    draw(convolve(data, len(data)//1000))
     plt.xlabel("Episodes")
     plt.ylabel("Returns")
     plt.title(f"Episode-Return graph with {desc}")
+
+
+def draw(data):
+    x = np.arange(1, len(data)+1)
+    plt.plot(x, data)
+
+
+def convolve(data, num):
+    return np.convolve(data, np.ones(num)/num, mode="same")[num+1:-num]
 
 
 def save(fname):
