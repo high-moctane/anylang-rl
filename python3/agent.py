@@ -44,7 +44,7 @@ class Agent:
     def learn(self, s, a, r, snext):
         s_idx = self.get_s_idx(s)
         a_idx = self.actions.index(a)
-        snext_idx = self.get_s_idx(s)
+        snext_idx = self.get_s_idx(snext)
 
         self.qtable[s_idx][a_idx] = \
             (1.0 - self.alpha) * self.qtable[s_idx][a_idx] + \
