@@ -63,24 +63,24 @@ func NewAgent() *Agent {
 
 	// こういうの書いてるとグローバルを汚染したくなる
 	return &Agent{
-		initQvalue,
-		actions,
-		xLimits,
-		thetaLimits,
-		xdotLimits,
-		thetadotLimits,
-		xNum,
-		thetaNum,
-		xdotNum,
-		thetadotNum,
-		xBins,
-		thetaBins,
-		xdotBins,
-		thetadotBins,
-		alpha,
-		gamma,
-		eps,
-		qTable,
+		initQvalue:     initQvalue,
+		actions:        actions,
+		xLimits:        xLimits,
+		thetaLimits:    thetaLimits,
+		xdotLimits:     xdotLimits,
+		thetadotLimits: thetadotLimits,
+		xNum:           xNum,
+		thetaNum:       thetaNum,
+		xdotNum:        xdotNum,
+		thetadotNum:    thetadotNum,
+		xBins:          xBins,
+		thetaBins:      thetaBins,
+		xdotBins:       xdotBins,
+		thetadotBins:   thetadotBins,
+		alpha:          alpha,
+		gamma:          gamma,
+		eps:            eps,
+		qTable:         qTable,
 	}
 }
 
@@ -102,7 +102,7 @@ func (ag *Agent) Learn(s []float64, a float64, r float64, sNext []float64) {
 
 	ag.qTable[sIdx][aIdx] =
 		(1.0-ag.alpha)*ag.qTable[sIdx][aIdx] +
-			ag.alpha*(r*ag.gamma*findMax(ag.qTable[sNextIdx]))
+			ag.alpha*(r+ag.gamma*findMax(ag.qTable[sNextIdx]))
 }
 
 // SetTestParams で test 用のパラメータに変更する
