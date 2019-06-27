@@ -18,8 +18,7 @@ class Experiment
     @agent = Agent.new()
     @env = Env.new()
 
-    # @episodes_num = 20000000
-    @episodes_num = 10000
+    @episodes_num = 20000000
     @steps_num = @env.fps * 10
   end
 
