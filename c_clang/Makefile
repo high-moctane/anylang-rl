@@ -34,7 +34,7 @@ lines_num.txt: agent.c agent.h env.c env.h experiment.c experiment.h main.c main
 	wc $^ > lines_num.txt
 
 main build_time.txt: *.h *.c
-	$(TIME) clang -o main -msse2 -fast -DSFMT_MEXP=19937 *.c 2> build_time.txt
+	$(TIME) clang -o main -Ofast *.c 2> build_time.txt
 
 animation.gif: states.csv actions.csv rewards.csv
 	python3 $(PWD)/../_plotter/animation.py $(PWD)
