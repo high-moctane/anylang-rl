@@ -16,3 +16,8 @@ __pycache__
 # バイナリ
 main
 
+# C言語
+SFMT*
+test.c
+*.gch
+*.dSYM
