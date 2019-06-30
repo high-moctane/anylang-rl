@@ -2,25 +2,30 @@ include $(PWD)/../include.mk
 
 RUBY = /usr/local/opt/ruby/bin/ruby
 
-.PHONY: build run clean images
+.PHONY: all build run clean images
 
-build: description.txt lines_num.txt build_time.txt
+all:
+	make description.txt
+	make lines_num.txt
+	make build_time.txt
+
+build:
 	@:
 
-run: build_time.txt run_time.txt
+run: returns.csv
 	@:
 
 clean:
-	rm -rf animation.gif
-	rm -rf returns.png
-	rm -rf actions.csv
-	rm -rf returns.csv
-	rm -rf rewards.csv
-	rm -rf states.csv
-	rm -rf description.txt
-	rm -rf build_time.txt
-	rm -rf lines_num.txt
-	rm -rf run_time.txt
+	rm -f animation.gif
+	rm -f returns.png
+	rm -f actions.csv
+	rm -f returns.csv
+	rm -f rewards.csv
+	rm -f states.csv
+	rm -f description.txt
+	rm -f build_time.txt
+	rm -f lines_num.txt
+	rm -f run_time.txt
 
 images: returns.png animation.gif
 	@:
