@@ -46,7 +46,7 @@ func NewAgent() *Agent {
 	thetadotLimits := []float64{-10.0, 10.0}
 
 	xNum := 4
-	thetaNum := 90
+	thetaNum := 40
 	xdotNum := 10
 	thetadotNum := 50
 

@@ -26,7 +26,7 @@ func NewExperiment() *Experiment {
 	return &Experiment{
 		agent:       agent,
 		env:         env,
-		episodesNum: 20000000,
+		episodesNum: 10000000,
 		stepsNum:    env.fps * 10,
 	}
 }

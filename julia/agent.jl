@@ -11,7 +11,7 @@ const thetadotlimits = [-10.0, 10.0]
 
 # 状態の分割数
 const xnum = 4
-const thetanum = 90
+const thetanum = 40
 const xdotnum = 10
 const thetadotnum = 50
 

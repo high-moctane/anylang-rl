@@ -25,7 +25,7 @@ agent_t *new_agent(sfmt_t *sfmt)
     agent->thetadot_limits[1] = 10.0;
 
     agent->x_num = 4;
-    agent->theta_num = 90;
+    agent->theta_num = 40;
     agent->xdot_num = 10;
     agent->thetadot_num = 50;
 

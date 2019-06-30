@@ -49,7 +49,7 @@ experiment_t *new_experiment(sfmt_t *sfmt)
 
     exp->agent = new_agent(sfmt);
     exp->env = new_env();
-    exp->episodes_num = 20000000;
+    exp->episodes_num = 10000000;
     exp->steps_num = exp->env->fps * 10;
     return exp;
 }

@@ -14,7 +14,7 @@ class Experiment:
         self.agent = agent.Agent()
         self.env = cartpole.CartPole()
 
-        self.episodes_num = 20000000
+        self.episodes_num = 10000000
         self.steps_num = self.env.fps * 10
 
     def run(self):

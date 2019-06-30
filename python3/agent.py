@@ -19,7 +19,7 @@ class Agent:
 
         # 状態の分割数
         self.x_num = 4
-        self.theta_num = 90
+        self.theta_num = 40
         self.xdot_num = 10
         self.thetadot_num = 50
 

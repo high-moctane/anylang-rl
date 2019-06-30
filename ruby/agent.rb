@@ -15,7 +15,7 @@ class Agent
 
     # 状態の分割数
     @x_num = 4
-    @theta_num = 90
+    @theta_num = 40
     @xdot_num = 10
     @thetadot_num = 50
 
