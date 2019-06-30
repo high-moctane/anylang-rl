@@ -1,4 +1,5 @@
-include $(PWD)/../include.mk
+MAKEFILE_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
+include $(MAKEFILE_DIR)/../include.mk
 
 RUBY = /usr/local/opt/ruby/bin/ruby
 
