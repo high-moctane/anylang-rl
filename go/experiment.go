@@ -36,7 +36,6 @@ func (e *Experiment) Run() []float64 {
 	returns := make([]float64, e.episodesNum)
 
 	for episode := 0; episode < e.episodesNum; episode++ {
-		e.env.ResetEnv()
 		hist := e.oneEpisode()
 		for _, r := range hist.rewards {
 			returns[episode] += r
@@ -47,7 +46,6 @@ func (e *Experiment) Run() []float64 {
 }
 
 func (e *Experiment) Test() *History {
-	e.env.ResetEnv()
 	e.agent.SetTestParams()
 	return e.oneEpisode()
 }
@@ -55,6 +53,7 @@ func (e *Experiment) Test() *History {
 func (e *Experiment) oneEpisode() *History {
 	hist := NewHistory(e.stepsNum)
 
+	e.env.ResetEnv()
 	s := e.env.State()
 	a := 0.0
 	r := 0.0

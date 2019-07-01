@@ -21,20 +21,19 @@ class Experiment:
         returns = [None for _ in range(self.episodes_num)]
 
         for episode in range(self.episodes_num):
-            self.env.reset_state()
             hist = self.one_episode()
             returns[episode] = sum(hist.rewards)
 
         return returns
 
     def test(self):
-        self.env.reset_state()
         self.agent.set_test_params()
         return self.one_episode()
 
     def one_episode(self):
         hist = History(self.steps_num)
 
+        self.env.reset_state()
         s = self.env.state()
         a = 0.0
         r = 0.0

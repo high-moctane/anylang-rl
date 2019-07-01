@@ -26,7 +26,6 @@ class Experiment
     returns = Array.new(@episodes_num)
 
     (0...@episodes_num).each do |episode|
-      @env.reset_state
       hist = one_episode
       returns[episode] = hist.rewards.sum
     end
@@ -35,7 +34,6 @@ class Experiment
   end
 
   def test
-    @env.reset_state
     @agent.set_test_params
     one_episode
   end
@@ -43,6 +41,7 @@ class Experiment
   def one_episode
     hist = History.new(@steps_num)
 
+    @env.reset_state
     s = @env.state
     a = 0.0
     r = 0.0
