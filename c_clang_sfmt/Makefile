@@ -45,10 +45,10 @@ main build_time.txt: *.h *.c
 	$(TIME) clang -o main -Ofast -DSFMT_MEXP=19937 *.c 2> build_time.txt
 
 animation.gif: states.csv actions.csv rewards.csv
-	python3 $(PWD)/../_plotter/animation.py $(PWD)
+	python3 $(MAKEFILE_DIR)/../_plotter/animation.py $(MAKEFILE_DIR)
 
 returns.png: returns.csv description.txt
-	python3 $(PWD)/../_plotter/returns_curve.py $(PWD)
+	python3 $(MAKEFILE_DIR)/../_plotter/returns_curve.py $(MAKEFILE_DIR)
 
 SFMT-src-1.5.1.tar.gz:
 	curl http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/SFMT-src-1.5.1.tar.gz -o $@

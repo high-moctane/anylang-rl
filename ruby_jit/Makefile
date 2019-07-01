@@ -44,8 +44,8 @@ build_time.txt:
 	$(TIME) true 2> build_time.txt
 
 animation.gif: states.csv actions.csv rewards.csv
-	python3 $(PWD)/../_plotter/animation.py $(PWD)
+	python3 $(MAKEFILE_DIR)/../_plotter/animation.py $(MAKEFILE_DIR)
 
 returns.png: returns.csv description.txt
-	python3 $(PWD)/../_plotter/returns_curve.py $(PWD)
+	python3 $(MAKEFILE_DIR)/../_plotter/returns_curve.py $(MAKEFILE_DIR)
 
