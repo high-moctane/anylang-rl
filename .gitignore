@@ -21,3 +21,8 @@ SFMT*
 test.c
 *.gch
 *.dSYM
+
+# Haskell
+*.o
+*.hi
+.stack-work
