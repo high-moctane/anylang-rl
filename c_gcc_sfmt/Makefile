@@ -3,10 +3,10 @@ include $(MAKEFILE_DIR)/../include.mk
 
 GCC := /usr/local/opt/gcc/bin/gcc-9
 
-.PHONY: all build run clean images sfmt
+.PHONY: all build run clean images
 
 all:
-	make sfmt
+	make SFMT.c
 	make description.txt
 	make lines_num.txt
 	make build_time.txt
@@ -58,7 +58,7 @@ SFMT-src-1.5.1.tar.gz:
 SFMT-src-1.5.1: SFMT-src-1.5.1.tar.gz
 	tar -zxvf SFMT-src-1.5.1.tar.gz
 
-sfmt: SFMT-src-1.5.1
+SFMT.c: SFMT-src-1.5.1
 	cp SFMT-src-1.5.1/*.h .
 	cp SFMT-src-1.5.1/*.c .
 	rm test.c
