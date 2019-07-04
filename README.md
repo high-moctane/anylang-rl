@@ -69,7 +69,15 @@ make images
 
 ### 結果の例
 
-(TODO)
+#### 倒立しているアニメーション
+
+![animation.gif](_fig/sample_animation.gif)
+
+#### 学習曲線
+
+青が実際に得られた収益で，オレンジが移動平均です。
+
+![returns.png](_fig/sample_returns.png)
 
 ## 言語の比較
 
