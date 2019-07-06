@@ -3,8 +3,10 @@ module Env
   , Action
   , Reward
   , initState
-  , oneStep
+  , tupleState
   , reward
+  , oneStep
+  , fps
   )
 where
 
@@ -14,17 +16,19 @@ g = 9.80665 -- 重力加速度
 mCart = 1.0 -- カートの質量
 mPole = 0.1 -- ポールの質量
 l = 0.5 -- ポールの半分の長さ
-fps = 50 -- frames per second
-tau = 1 / fps -- 制御周期
+fps = 50 :: Int -- frames per second
+tau = 1.0 / fromIntegral fps :: Double -- 制御周期
 
 -- あとでつかう
 ml = mPole * l
 mass = mCart + mPole
 
-
 -- 状態ベクトル
 -- 最初 tuple で実装しようと思ったけど気が遠くなるので List にした
 type State = [Double]
+
+tupleState :: State -> (Double, Double, Double, Double)
+tupleState [x, theta, xdot, thetadot] = (x, theta, xdot, thetadot)
 
 -- 状態ベクトルの初期値
 initState :: State
