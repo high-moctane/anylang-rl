@@ -28,6 +28,9 @@
 - c
   - 別途 SFMT が必要です
   - clang
+- Rust
+    - cargo
+    - rustc
 
 ## 使い方
 
