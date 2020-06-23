@@ -5,8 +5,8 @@ from typing import List
 import q_table
 
 
-class QLearning(abs_agent.Agent):
-    """Q-learning をします。"""
+class Sarsa(abs_agent.Agent):
+    """Sarsa をします。"""
 
     def __init__(self, config: "config.Config"):
         self.alpha = float(config.cfg["AGENT_ALPHA"])
@@ -23,7 +23,7 @@ class QLearning(abs_agent.Agent):
     def learn(self, q_table_: "q_table.QTable", s1: int, a1: int, r: float, s2: int, a2: int):
         """学習します。"""
         q_table_.table[s1][a1] = (1. - self.alpha) * q_table_.table[s1][a1] + \
-            self.alpha * (r + self.gamma * max(q_table_.table[s2]))
+            self.alpha * (r + self.gamma * q_table_.table[s2][a2])
 
     def fix(self):
         self.alpha = 0.
