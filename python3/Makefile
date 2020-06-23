@@ -1,10 +1,15 @@
-.PHONY: build clean run
+.PHONY: build clean maze_sarsa maze_qlearning
 
 build:
-	mkdir result
+	mkdir -p result/maze_sarsa
+	mkdir -p result/maze_qlearning
 
 clean:
 	rm -rf result
 
-run:
-	python3 main.py ../_settings/maze.env
+maze_sarsa:
+	python3 main.py ../_settings/maze_sarsa.env
+
+maze_qlearning:
+	python3 main.py ../_settings/maze_qlearning.env
+
