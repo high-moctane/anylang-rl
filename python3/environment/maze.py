@@ -11,6 +11,8 @@ class Maze(abs_env.Environment):
         """
         maze: 迷路文字列
         """
+        super().__init__()
+
         self._goal_reward = float(config.cfg["ENV_GOAL_REWARD"])
         self._dead_reawrd = float(config.cfg["ENV_DEAD_REWARD"])
         self._default_reward = float(config.cfg["ENV_DEFAULT_REWARD"])

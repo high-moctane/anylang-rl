@@ -9,6 +9,7 @@ class QLearning(abs_agent.Agent):
     """Q-learning をします。"""
 
     def __init__(self, config: "config.Config"):
+        super().__init__()
         self.alpha = float(config.cfg["AGENT_ALPHA"])
         self.gamma = float(config.cfg["AGENT_GAMMA"])
         self.eps = float(config.cfg["AGENT_EPSILON"])
