@@ -63,24 +63,22 @@ class Experiment:
             bool: 成功したかどうか
         """
 
-        # TODO: Q-learning にしか対応してない
-
         self.env.reset()
         s1 = s2 = self.env.s()
-        a1 = a2 = 0
-        r1 = r2 = 0.
+        a1 = a2 = self.agent.a(self.q_table, s1)
+        r1 = r2 = self.env.r()
         returns = 0.
 
-        s = self.env.s()
         for step in range(self._max_step):
-            a = self.agent.a(self.q_table, s)
-            self.env.run_step(a)
-            snext = self.env.s()
+            a1 = a2
+            self.env.run_step(a1)
+            s2 = self.env.s()
+            a2 = self.agent.a(self.q_table, s2)
             r = self.env.r()
             returns += r
-            self.agent.learn(self.q_table, s, a, r, snext, 0)
-            s = snext
-            if self.env.is_done(s):
+            self.agent.learn(self.q_table, s1, a1, r, s2, a2)
+            s1 = s2
+            if self.env.is_done(s1):
                 break
 
-        return returns, self.env.is_success(s)
+        return returns, self.env.is_success(s1)
