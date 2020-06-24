@@ -30,7 +30,7 @@ class Runner:
 
     def _parse_args(self, args: List[str]):
         if len(args) != 1:
-            raise InvalidArgsException
+            raise InvalidArgsException(args)
         self.config = config.Config(args[0])
 
     def run(self):
@@ -51,11 +51,11 @@ class Runner:
         elif agent_name == "Sarsa":
             return sarsa.Sarsa(self.config)
         else:
-            raise InvalidAgentName
+            raise InvalidAgentName(agent_name)
 
     def _choose_environment(self):
         env_name = self.config.cfg["ENV_NAME"]
         if env_name == "Maze":
             return maze.Maze(self.config)
         else:
-            raise InvalidEnvironmentName
+            raise InvalidEnvironmentName(env_name)
