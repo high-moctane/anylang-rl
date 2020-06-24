@@ -25,9 +25,6 @@ class Maze(abs_env.Environment):
         self._goal = (self._h - 2, self._w - 2)
 
         self._pos = self._start
-        self._step = 0
-
-        self._history = MazeHistory(int(config.cfg["EXPERIMENT_MAX_STEP"]))
 
         self.reset()
 
@@ -83,25 +80,19 @@ class Maze(abs_env.Environment):
         """s を pos に変換します。"""
         return (s // self._w, s % self._w)
 
+    def info(self):
+        """現在の座標 (h, w) についてコンマ区切りで返します。"""
+        return "{},{}".format(self._pos[0], self._pos[1])
+
     def reset(self):
         """環境を初期状態に戻します。"""
         self._pos = self._start
         self._step = 0
-        self._reset_history()
-
-    def _reset_history(self):
-        """履歴を初期化します"""
-        self._history.clear()
-        self._history.s[0] = self._pos_to_s(self._start)
-        self._history.a[0] = 0
-        self._history.r[0] = self._default_reward
-        self._history.pos[0] = self._start
 
     def run_step(self, a: int):
         """a を受け取って内部の状態を遷移させます。"""
         self._step += 1
         self._move(a)
-        self._write_history(self.s(), a, self.r(), self._pos)
 
     def _move(self, a: int):
         """a して pos を更新します。"""
@@ -114,13 +105,6 @@ class Maze(abs_env.Environment):
         else:
             self._pos = (self._pos[0], self._pos[1]+1)
 
-    def _write_history(self, s, a, r, pos):
-        """s, a, r, pos を保存します。"""
-        self._history.s[self._step] = s
-        self._history.a[self._step] = a
-        self._history.r[self._step] = r
-        self._history.pos[self._step] = pos
-
     def is_done(self, s) -> bool:
         """タスクが終了したかどうかを返します。"""
         pos = self._s_to_pos(s)
@@ -132,35 +116,3 @@ class Maze(abs_env.Environment):
         """タスクが成功したかどうかを返します。"""
         pos = self._s_to_pos(s)
         return self._is_goal(pos)
-
-    def save_history(self, path: str):
-        """履歴を保存します。"""
-        self._history.save(path)
-
-
-class MazeHistory(history.History):
-    """迷路の履歴を保存します。"""
-
-    def __init__(self, max_steps):
-        self.len = max_steps + 1
-        self.s = [None] * self.len
-        self.a = [None] * self.len
-        self.r = [None] * self.len
-        self.pos = [None] * self.len
-
-    def clear(self):
-        for i in range(self.len):
-            self.s[i] = self.a[i] = self.r[i] = self.pos[i] = None
-
-    def save(self, path: str):
-        """.tsv ファイルに保存します。"""
-        with open(path, mode="w") as f:
-            for i in range(self.len):
-                if self.s[i] is None:
-                    break
-                s = str(self.s[i])
-                a = str(self.a[i])
-                r = "{:.12f}".format(self.r[i])
-                pos = str(self.pos[i])
-                f.write("\t".join([s, a, r, pos]))
-                f.write("\n")

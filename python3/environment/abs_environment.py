@@ -20,6 +20,11 @@ class Environment(abc.ABC):
         pass
 
     @abc.abstractmethod
+    def info(self) -> str:
+        """現在の環境の状態についてわかりやすい文字列を提供します。"""
+        pass
+
+    @abc.abstractmethod
     def r(self, s1: int, a1: int, s2: int) -> float:
         """s1 で a1 したとき s2 に移った場合の報酬です。"""
         pass
@@ -42,9 +47,4 @@ class Environment(abc.ABC):
     @abc.abstractmethod
     def is_success(self, s) -> bool:
         """タスクが成功したかどうかを返します。"""
-        pass
-
-    @abc.abstractmethod
-    def save_history(self, path: str):
-        """history をセーブします。"""
         pass
