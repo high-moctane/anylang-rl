@@ -1,10 +1,7 @@
 TIME = /usr/bin/time -p
 PYTHON = /usr/local/bin/python3
 
-MAZE_QLEARNING = results/maze_qlearning
-MAZE_SARSA = results/maze_sarsa
-
-.PHONY: build clean maze_qlearning maze_sarsa
+.PHONY: build clean run maze_qlearning maze_sarsa
 
 build: results/version.txt
 
@@ -18,14 +15,13 @@ clean:
 	rm -rf agent/__pycache__
 	rm -rf environment/__pycache__
 
-maze_qlearning: $(MAZE_QLEARNING)/history.tsv $(MAZE_QLEARNING)/qtable.bin $(MAZE_QLEARNING)/returns.txt $(MAZE_QLEARNING)/time.txt
-	mkdir -p $(MAZE_QLEARNING)
+run: build maze_qlearning maze_sarsa
 
-$(MAZE_QLEARNING)/history.tsv $(MAZE_QLEARNING)/qtable.bin $(MAZE_QLEARNING)/returns.txt $(MAZE_QLEARNING)/time.txt:
-	$(TIME) $(PYTHON) main.py ../_settings/maze_qlearning.env 2> $(MAZE_QLEARNING)/time.txt
+maze_qlearning:
+	mkdir -p results/maze_qlearning
+	$(TIME) $(PYTHON) main.py ../_settings/maze_qlearning.env 2> results/maze_qlearning/time.txt
 
-maze_sarsa: $(MAZE_SARSA)/history.tsv $(MAZE_SARSA)/qtable.bin $(MAZE_SARSA)/returns.txt $(MAZE_SARSA)/time.txt
-	mkdir -p $(MAZE_SARSA)
+maze_sarsa:
+	mkdir -p results/maze_sarsa
+	$(TIME) $(PYTHON) main.py ../_settings/maze_sarsa.env 2> results/maze_sarsa/time.txt
 
-$(MAZE_SARSA)/history.tsv $(MAZE_SARSA)/qtable.bin $(MAZE_SARSA)/returns.txt $(MAZE_SARSA)/time.txt:
-	$(TIME) $(PYTHON) main.py ../_settings/maze_sarsa.env 2> $(MAZE_SARSA)/time.txt
