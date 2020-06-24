@@ -105,14 +105,12 @@ class Maze(abs_env.Environment):
         else:
             self._pos = (self._pos[0], self._pos[1]+1)
 
-    def is_done(self, s) -> bool:
+    def is_done(self) -> bool:
         """タスクが終了したかどうかを返します。"""
-        pos = self._s_to_pos(s)
-        return self._is_goal(pos) or \
-            not self._is_in_maze(pos) or \
-            self._is_in_wall(pos)
+        return self._is_goal(self._pos) or \
+            not self._is_in_maze(self._pos) or \
+            self._is_in_wall(self._pos)
 
-    def is_success(self, s) -> bool:
+    def is_success(self) -> bool:
         """タスクが成功したかどうかを返します。"""
-        pos = self._s_to_pos(s)
-        return self._is_goal(pos)
+        return self._is_goal(self._pos)

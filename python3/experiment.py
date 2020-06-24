@@ -83,7 +83,7 @@ class Experiment:
             hist.append(a1, s2, r, self.env.info())
 
             s1 = s2
-            if self.env.is_done(s1):
+            if self.env.is_done():
                 break
 
-        return hist, self.env.is_success(s1)
+        return hist, self.env.is_success()

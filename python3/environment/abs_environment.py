@@ -40,11 +40,11 @@ class Environment(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def is_done(self, s) -> bool:
+    def is_done(self) -> bool:
         """タスクが終了したかどうかを返します。"""
         pass
 
     @abc.abstractmethod
-    def is_success(self, s) -> bool:
+    def is_success(self) -> bool:
         """タスクが成功したかどうかを返します。"""
         pass
