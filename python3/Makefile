@@ -1,7 +1,14 @@
 TIME = /usr/bin/time -p
 PYTHON = /usr/local/bin/python3
 
-.PHONY: build clean run maze_qlearning maze_sarsa
+.PHONY: build \
+	clean \
+	run \
+	cartpole_qlearning \
+	maze_qlearning \
+	maze_sarsa \
+	pendulum_qlearning \
+	pendulum_qlearning_fig
 
 build: results/version.txt
 
@@ -25,3 +32,26 @@ maze_sarsa:
 	mkdir -p results/maze_sarsa
 	$(TIME) $(PYTHON) main.py ../_settings/maze_sarsa.env 2> results/maze_sarsa/time.txt
 
+pendulum_qlearning:
+	mkdir -p results/pendulum_qlearning
+	$(TIME) $(PYTHON) main.py ../_settings/pendulum_qlearning.env 2> results/pendulum_qlearning/time.txt
+
+pendulum_qlearning_fig: results/pendulum_qlearning/animation.gif results/pendulum_qlearning/returns.png
+
+results/pendulum_qlearning/animation.gif: results/pendulum_qlearning/history.tsv
+	$(PYTHON) ../_tools/pendulum/visualizer/main.py $^
+
+results/pendulum_qlearning/returns.png: results/pendulum_qlearning/returns.txt
+	$(PYTHON) ../_tools/returns_curve/main.py $^ "Pendulum Q-learning"
+
+pendulum_sarsa:
+	mkdir -p results/pendulum_sarsa
+	$(TIME) $(PYTHON) main.py ../_settings/pendulum_sarsa.env 2> results/pendulum_sarsa/time.txt
+
+pendulum_sarsa_fig: results/pendulum_sarsa/animation.gif results/pendulum_sarsa/returns.png
+
+results/pendulum_sarsa/animation.gif: results/pendulum_sarsa/history.tsv
+	$(PYTHON) ../_tools/pendulum/visualizer/main.py $^
+
+results/pendulum_sarsa/returns.png: results/pendulum_sarsa/returns.txt
+	$(PYTHON) ../_tools/returns_curve/main.py $^ "Pendulum Sarsa"

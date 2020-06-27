@@ -70,7 +70,7 @@ class Experiment:
         a1 = a2 = self.agent.a(self.q_table, s1)
         r1 = r2 = self.env.r()
 
-        hist.append(None, s2, r2, self.env.info())
+        hist.append(a1, s2, r2, self.env.info())
 
         for step in range(self._max_step):
             a1 = a2
