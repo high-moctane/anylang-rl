@@ -22,7 +22,6 @@ class Experiment:
             self.env.a_space(),
         )
 
-        self._episode = 0
         self._success_count = 0
 
         self._returns = []
