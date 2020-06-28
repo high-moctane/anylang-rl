@@ -2,49 +2,49 @@ import abc
 
 
 class Environment(abc.ABC):
-    """環境の抽象クラスです。"""
+    """Abstract environment class."""
 
     @abc.abstractmethod
     def s_space(self) -> int:
-        """s のインデックス取りうる個数を返します。"""
+        """Returns the possible range of states."""
         pass
 
     @abc.abstractmethod
     def a_space(self) -> int:
-        """a のインデックスの取りうる個数を返します。"""
+        """Returns the possible range of actions."""
         pass
 
     @abc.abstractmethod
     def s(self) -> int:
-        """s のインデックスを返します。"""
+        """Returns a state index."""
         pass
 
     @abc.abstractmethod
     def info(self) -> str:
-        """現在の環境の状態についてわかりやすい文字列を提供します。"""
+        """Returns string which describes an internal state."""
         pass
 
     @abc.abstractmethod
-    def r(self, s1: int, a1: int, s2: int) -> float:
-        """s1 で a1 したとき s2 に移った場合の報酬です。"""
+    def r(self) -> float:
+        """Returns a reward."""
         pass
 
     @abc.abstractmethod
     def reset(self):
-        """環境を初期状態に戻します。"""
+        """Reset an internal state of the environment."""
         pass
 
     @abc.abstractmethod
     def run_step(self, a):
-        """a を受け取って内部の状態を遷移させます。"""
+        """Update an internal state with an action."""
         pass
 
     @abc.abstractmethod
     def is_done(self) -> bool:
-        """タスクが終了したかどうかを返します。"""
+        """Returns whether the task is done."""
         pass
 
     @abc.abstractmethod
     def is_success(self) -> bool:
-        """タスクが成功したかどうかを返します。"""
+        """Returns whether the task was successful."""
         pass

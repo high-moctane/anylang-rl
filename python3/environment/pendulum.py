@@ -5,7 +5,7 @@ from typing import List, Tuple
 
 
 class Pendulum():
-    """倒立振子の実験環境です。"""
+    """Inverted pendulum environment."""
 
     def __init__(self, cfg: config.Config):
         super().__init__()
@@ -34,15 +34,15 @@ class Pendulum():
         self.reset()
 
     def s_space(self) -> int:
-        """s のインデックス取りうる個数を返します。"""
+        """Returns the range of states."""
         return self._theta_space * self._thetadot_space
 
     def a_space(self) -> int:
-        """a のインデックスの取りうる個数を返します。"""
+        """Returns the range of actions."""
         return len(self._actions)
 
     def s(self) -> int:
-        """s のインデックスを返します。"""
+        """Returns a state index."""
         theta_idx = self._digitize(
             self._theta_bounds, self._theta_space, self._s[0])
         thetadot_idx = self._digitize(
@@ -51,8 +51,7 @@ class Pendulum():
         return theta_idx * self._thetadot_space + thetadot_idx
 
     def _digitize(self, bounds: List[int], num: int, val: float) -> int:
-        """[bounds[0], bounds[1]] を境界として num 個のスペースに区切った場合の
-        val の番号を返します。"""
+        """Returns val's index in the space separated by bounds."""
         if val < bounds[0]:
             return 0
         elif val >= bounds[1]:
@@ -61,26 +60,34 @@ class Pendulum():
         return int((val - bounds[0]) // width) + 1
 
     def info(self) -> str:
-        """現在の環境の状態についてわかりやすい文字列を提供します。"""
+        """Return a (theta, thetadot) string."""
         return ",".join(map(lambda v: "{:.15f}".format(v), self._s))
 
     def r(self) -> float:
-        """s1 で a1 したとき s2 に移った場合の報酬です。"""
+        """Reward."""
         theta = self._s[0]
         return -abs(theta) + pi / 2.
 
     def reset(self):
-        """環境を初期状態に戻します。"""
+        """Reset the environment."""
         self._s = self._init_state
 
     def run_step(self, a):
-        """a を受け取って内部の状態を遷移させます。"""
+        """Update the internal state."""
         u = self._actions[a]
 
         self._s = self._solve_runge_kutta(self._s, u, self._tau)
 
     def _solve_runge_kutta(self, s: Tuple[float, float], u: float, dt: float) -> Tuple[float, float]:
-        """s で u を入力したときの dt 時間後の s をルンゲクッタで求めます。"""
+        """Solve the inversed pendulum's dynamics.
+        Args:
+            s:  (theta, thetadot)
+            u:  force
+            dt: tic
+
+        Returns:
+            (next_theta, next_thetadot)
+        """
         k1 = self._differential(s, u)
         s1 = self._solve_euler(s, k1, dt / 2)
         k2 = self._differential(s1, u)
@@ -95,7 +102,13 @@ class Pendulum():
         return self._normalize_s(snext)
 
     def _differential(self, s: Tuple[float, float], u: float) -> Tuple[float, float]:
-        """s で u を加えたときの微分。"""
+        """The differential of the inverted pendulum equation of motion.
+        Args:
+            s: (theta, thetadot)
+            u: force
+        Returns:
+            (thetadot, theta2dot)
+        """
         theta, thetadot = self._s
 
         l = self._l
@@ -106,16 +119,24 @@ class Pendulum():
         return (thetadot + thetaddot * self._tau, thetaddot)
 
     def _solve_euler(self, s: Tuple[float, float], sdot: Tuple[float, float], dt: float) -> Tuple[float, float]:
-        """s と sdot より dt 後の s をオイラー法で求める。"""
+        """Solve equation of motion with Euler method.
+        Args:
+            s:    (theta, thetadot)
+            sdot: (thetadot, theta2dot)
+            dt:   tic
+        Returns:
+            (next_theta, next_thetadot)
+        """
         return (si + sdoti * dt for si, sdoti in zip(s, sdot))
 
     def _normalize_s(self, s: Tuple[float, float]) -> Tuple[float, float]:
+        """Normalize state (related to angle)."""
         return ((s[0] + pi) % (2. * pi) - pi, s[1])
 
     def is_done(self) -> bool:
-        """タスクが終了したかどうかを返します。"""
+        """Return the task is done."""
         return False
 
     def is_success(self) -> bool:
-        """タスクが成功したかどうかを返します。"""
+        """Return False because the experiment lasts all the steps."""
         return False

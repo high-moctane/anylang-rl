@@ -6,7 +6,7 @@ import history
 
 
 class Experiment:
-    """実験をするクラスです。"""
+    """Runs reinforcement learning experiments."""
 
     def __init__(self, config: config.Config, agent: abs_agent.Agent, env: abs_env.Environment):
         self._config = config
@@ -31,7 +31,7 @@ class Experiment:
         self._returns = []
 
     def run(self):
-        """実験をします。"""
+        """Run an experiment."""
         for episode in range(self._max_episode):
             hist, succeeded = self.run_episode()
             if succeeded:
@@ -44,23 +44,24 @@ class Experiment:
                 break
 
     def test_and_save(self, path: str):
-        """学習率を止めた状態で動かして履歴を保存します。"""
+        """Fix the agent, run test, and save the results."""
         self.agent.fix()
         hist, _ = self.run_episode()
         hist.save(path)
         self.q_table.save(self._config.cfg["QTABLE_PATH"])
 
     def save_returns(self, path: str):
+        """Save returns into path."""
         with open(path, mode="w") as f:
             for returns in self._returns:
                 f.write("{:.15f}\n".format(returns))
 
     def run_episode(self) -> ("history.History", bool):
-        """1 エピソード実行します。
+        """Runs one episode.
         Returns:
-            (History, bool)
-            History: 実験の履歴
-            bool: 成功したかどうか
+            (history, bool)
+            history: the history of the episode.
+            bool: whether the experiment was successful.
         """
 
         hist = history.History()

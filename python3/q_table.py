@@ -2,18 +2,19 @@ import pickle
 
 
 class QTable:
-    """Q テーブルです。"""
+    """Q-table object."""
 
     @classmethod
     def load(cls, path: str):
+        """Loads Q-table from path."""
         with open(path, mode="rb") as f:
             return pickle.load(f)
 
     def __init__(self, init_q: float, s_space: int, a_space: int):
         """
-        init_q: テーブルの初期値
-        s_space: 状態空間の大きさ
-        a_space: 行動空間の大きさ
+        init_q: initial q-value
+        s_space: range of states' indices
+        a_space: range of actions' indices
         """
         self.init_q = init_q
         self.s_space = s_space
@@ -22,6 +23,6 @@ class QTable:
         self.table = [[init_q] * a_space for _ in range(s_space)]
 
     def save(self, path: str):
-        """Q テーブルを path に保存します"""
+        """Saves Q-table into path."""
         with open(path, mode="wb") as f:
             pickle.dump(self, f)

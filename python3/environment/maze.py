@@ -5,12 +5,9 @@ from typing import List, Tuple
 
 
 class Maze(abs_env.Environment):
-    """迷路タスクです。"""
+    """Maze task."""
 
     def __init__(self, config: "config.Config"):
-        """
-        maze: 迷路文字列
-        """
         super().__init__()
 
         self._goal_reward = float(config.cfg["ENV_GOAL_REWARD"])
@@ -29,7 +26,7 @@ class Maze(abs_env.Environment):
         self.reset()
 
     def _parse_maze(self, maze: str) -> List[List[str]]:
-        """迷路文字列を2重リストにパースします。"""
+        """Parse maze string into a double list."""
         res = [[None] * self._w for _ in range(self._h)]
         for h in range(self._h):
             for w in range(self._w):
@@ -39,23 +36,23 @@ class Maze(abs_env.Environment):
         return res
 
     def s_space(self) -> int:
-        """s のインデックス取りうる個数を返します。"""
+        """Returns the range of states."""
         return self._h * self._w
 
     def a_space(self) -> int:
-        """a のインデックスの取りうる個数を返します。"""
+        """Returns the range of actions."""
         return 4
 
     def s(self) -> int:
-        """s のインデックスを返します。"""
+        """Returns a state index."""
         return self._pos_to_s(self._pos)
 
     def _pos_to_s(self, pos: Tuple[int, int]) -> int:
-        """pos を s のインデックスに変換します。"""
+        """Convert a position into a state index."""
         return pos[0] * self._w + pos[1]
 
     def r(self) -> float:
-        """s1 で a1 したとき s2 に移った場合の報酬です。"""
+        """Returns a reward."""
         pos = self._pos
 
         if self._is_goal(pos):
@@ -65,37 +62,37 @@ class Maze(abs_env.Environment):
         return self._default_reward
 
     def _is_goal(self, pos: Tuple[int, int]) -> bool:
-        """pos がゴールであるか判別します。"""
+        """Returns whether the pos is at the goal."""
         return pos == self._goal
 
     def _is_in_maze(self, pos: Tuple[int, int]) -> bool:
-        """pos が迷路内にいるか判別します。"""
+        """Returns whether the pos is in the maze."""
         return 0 <= pos[0] < self._h and 0 <= pos[1] < self._w
 
     def _is_in_wall(self, pos: Tuple[int, int]) -> bool:
-        """pos が壁の中にいるか判別します。"""
+        """Returns whether the pos is in the wall."""
         return self._maze[pos[0]][pos[1]] == "#"
 
     def _s_to_pos(self, s: int) -> Tuple[int, int]:
-        """s を pos に変換します。"""
+        """Converts a state index into a position."""
         return (s // self._w, s % self._w)
 
     def info(self):
-        """現在の座標 (h, w) についてコンマ区切りで返します。"""
+        """Return the current position as a commma separeted string."""
         return "{},{}".format(self._pos[0], self._pos[1])
 
     def reset(self):
-        """環境を初期状態に戻します。"""
+        """Reset the environment."""
         self._pos = self._start
         self._step = 0
 
     def run_step(self, a: int):
-        """a を受け取って内部の状態を遷移させます。"""
+        """Update the internal state."""
         self._step += 1
         self._move(a)
 
     def _move(self, a: int):
-        """a して pos を更新します。"""
+        """Returns the next position after taking the action."""
         if a == 0:
             self._pos = (self._pos[0]-1, self._pos[1])
         elif a == 1:
@@ -106,11 +103,11 @@ class Maze(abs_env.Environment):
             self._pos = (self._pos[0], self._pos[1]+1)
 
     def is_done(self) -> bool:
-        """タスクが終了したかどうかを返します。"""
+        """Return whether the task is done."""
         return self._is_goal(self._pos) or \
             not self._is_in_maze(self._pos) or \
             self._is_in_wall(self._pos)
 
     def is_success(self) -> bool:
-        """タスクが成功したかどうかを返します。"""
+        """Return whether the task was successful."""
         return self._is_goal(self._pos)

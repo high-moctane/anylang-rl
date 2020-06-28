@@ -9,33 +9,34 @@ from typing import List
 
 
 class InvalidArgsException(Exception):
-    """Args が不正だったときに投げるエラーです。"""
+    """The exception about the arguments."""
     pass
 
 
 class InvalidAgentName(Exception):
-    """エージェントの名前が変だったときに投げるエラーです。"""
+    """The exception about the agent name."""
     pass
 
 
 class InvalidEnvironmentName(Exception):
-    """環境の名前が変だったときに投げるエラーです。"""
+    """The exception about the environment name."""
     pass
 
 
 class Runner:
-    """プログラムを走らせます。"""
+    """Runs the program."""
 
     def __init__(self, args: List[str]):
         self._parse_args(args)
 
     def _parse_args(self, args: List[str]):
+        """Parse args"""
         if len(args) != 1:
             raise InvalidArgsException(args)
         self.config = config.Config(args[0])
 
     def run(self):
-        """実行します。"""
+        """Runs the program."""
         agent = self._choose_agent()
         env = self._choose_environment()
         exp = experiment.Experiment(self.config, agent, env)
@@ -46,6 +47,7 @@ class Runner:
         exp.q_table.save(self.config.cfg["QTABLE_PATH"])
 
     def _choose_agent(self):
+        """Chooses the agent."""
         agent_name = self.config.cfg["AGENT_NAME"]
         if agent_name == "Q-learning":
             return q_learning.QLearning(self.config)
@@ -55,6 +57,7 @@ class Runner:
             raise InvalidAgentName(agent_name)
 
     def _choose_environment(self):
+        """Choose the environment."""
         env_name = self.config.cfg["ENV_NAME"]
         if env_name == "Maze":
             return maze.Maze(self.config)
