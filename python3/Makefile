@@ -1,4 +1,5 @@
 TIME = /usr/bin/time -p
+WC = /usr/bin/wc
 PYTHON = /usr/local/bin/python3
 
 .PHONY: build \
@@ -14,7 +15,7 @@ PYTHON = /usr/local/bin/python3
 	pendulum_sarsa \
 	pendulum_sarsa_fig
 
-build: results/version.txt results/time.txt
+build: results/version.txt results/time.txt results/wc.txt
 
 results/version.txt:
 	mkdir -p results
@@ -22,6 +23,9 @@ results/version.txt:
 
 results/time.txt:
 	$(TIME) $(TIME) 2> $@
+
+results/wc.txt:
+	wc *.py */*.py > $@
 
 clean:
 	rm -rf results
