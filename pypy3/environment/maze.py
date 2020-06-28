@@ -84,15 +84,9 @@ class Maze(abs_env.Environment):
     def reset(self):
         """Reset the environment."""
         self._pos = self._start
-        self._step = 0
 
     def run_step(self, a: int):
         """Update the internal state."""
-        self._step += 1
-        self._move(a)
-
-    def _move(self, a: int):
-        """Returns the next position after taking the action."""
         if a == 0:
             self._pos = (self._pos[0]-1, self._pos[1])
         elif a == 1:

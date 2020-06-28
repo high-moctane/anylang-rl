@@ -42,9 +42,8 @@ class Runner:
         exp = experiment.Experiment(self.config, agent, env)
 
         exp.run()
-        exp.save_returns(self.config.cfg["RETURNS_PATH"])
-        exp.test_and_save(self.config.cfg["HISTORY_PATH"])
-        exp.q_table.save(self.config.cfg["QTABLE_PATH"])
+        exp.save_returns()
+        exp.test_and_save()
 
     def _choose_agent(self):
         """Chooses the agent."""

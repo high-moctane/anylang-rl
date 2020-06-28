@@ -9,8 +9,6 @@ class Experiment:
     """Runs reinforcement learning experiments."""
 
     def __init__(self, config: config.Config, agent: abs_agent.Agent, env: abs_env.Environment):
-        self._config = config
-
         self._max_episode = int(config.cfg["EXPERIMENT_MAX_EPISODE"])
         self._max_step = int(config.cfg["EXPERIMENT_MAX_STEP"])
         self._max_succeeded_episode = int(
@@ -25,10 +23,13 @@ class Experiment:
         )
 
         self._episode = 0
-        self._step = 0
         self._success_count = 0
 
         self._returns = []
+
+        self._returns_path = config.cfg["RETURNS_PATH"]
+        self._q_table_path = config.cfg["QTABLE_PATH"]
+        self._history_path = config.cfg["HISTORY_PATH"]
 
     def run(self):
         """Run an experiment."""
@@ -43,16 +44,16 @@ class Experiment:
             if self._success_count >= self._max_succeeded_episode:
                 break
 
-    def test_and_save(self, path: str):
+    def test_and_save(self):
         """Fix the agent, run test, and save the results."""
         self.agent.fix()
         hist, _ = self.run_episode()
-        hist.save(path)
-        self.q_table.save(self._config.cfg["QTABLE_PATH"])
+        hist.save(self._history_path)
+        self.q_table.save(self._q_table_path)
 
-    def save_returns(self, path: str):
+    def save_returns(self):
         """Save returns into path."""
-        with open(path, mode="w") as f:
+        with open(self._returns_path, mode="w") as f:
             for returns in self._returns:
                 f.write("{:.15f}\n".format(returns))
 
