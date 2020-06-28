@@ -14,11 +14,14 @@ PYTHON = /usr/local/bin/python3
 	pendulum_sarsa \
 	pendulum_sarsa_fig
 
-build: results/version.txt
+build: results/version.txt results/time.txt
 
 results/version.txt:
 	mkdir -p results
 	$(PYTHON) -V > $@
+
+results/time.txt:
+	$(TIME) $(TIME) 2> $@
 
 clean:
 	rm -rf results
@@ -26,7 +29,7 @@ clean:
 	rm -rf agent/__pycache__
 	rm -rf environment/__pycache__
 
-run: build maze_qlearning maze_sarsa pendulum_qlearning pendulum_sarsa
+run: maze_qlearning maze_sarsa pendulum_qlearning pendulum_sarsa
 
 fig: maze_qlearning_fig maze_sarsa_fig pendulum_qlearning_fig pendulum_sarsa_fig
 
