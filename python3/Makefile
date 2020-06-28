@@ -43,7 +43,7 @@ results/maze_qlearning/route.txt: results/maze_qlearning/history.tsv
 	$(PYTHON) ../_tools/maze/visualizer/main.py $^ > $@
 
 results/maze_qlearning/returns.png: results/maze_qlearning/returns.txt
-	$(PYTHON) ../_tools/returns_curve/main.py $^ "Maze Q-learning"
+	$(PYTHON) ../_tools/learning_curve/main.py $^
 
 maze_sarsa:
 	mkdir -p results/maze_sarsa
@@ -55,7 +55,7 @@ results/maze_sarsa/route.txt: results/maze_sarsa/history.tsv
 	$(PYTHON) ../_tools/maze/visualizer/main.py $^ > $@
 
 results/maze_sarsa/returns.png: results/maze_sarsa/returns.txt
-	$(PYTHON) ../_tools/returns_curve/main.py $^ "Maze Sarsa"
+	$(PYTHON) ../_tools/learning_curve/main.py $^
 
 pendulum_qlearning:
 	mkdir -p results/pendulum_qlearning
@@ -67,7 +67,7 @@ results/pendulum_qlearning/animation.gif: results/pendulum_qlearning/history.tsv
 	$(PYTHON) ../_tools/pendulum/visualizer/main.py $^
 
 results/pendulum_qlearning/returns.png: results/pendulum_qlearning/returns.txt
-	$(PYTHON) ../_tools/returns_curve/main.py $^ "Pendulum Q-learning"
+	$(PYTHON) ../_tools/learning_curve/main.py $^
 
 pendulum_sarsa:
 	mkdir -p results/pendulum_sarsa
@@ -79,4 +79,4 @@ results/pendulum_sarsa/animation.gif: results/pendulum_sarsa/history.tsv
 	$(PYTHON) ../_tools/pendulum/visualizer/main.py $^
 
 results/pendulum_sarsa/returns.png: results/pendulum_sarsa/returns.txt
-	$(PYTHON) ../_tools/returns_curve/main.py $^ "Pendulum Sarsa"
+	$(PYTHON) ../_tools/learning_curve/main.py $^

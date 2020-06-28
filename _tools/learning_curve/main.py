@@ -5,17 +5,18 @@ import numpy as np
 
 USAGE = "Usage: python main.py path/to/returns.txt description"
 OUTPUT_FNAME = "returns.png"
+TITLE = "Learning Curve"
 
 
 def run(argv):
-    returns_file, description = parse_args(argv)
+    returns_file = parse_args(argv)
     returns = read_returns(returns_file)
-    plot(returns, description)
+    plot(returns)
     save(output_path(returns_file))
 
 
 def parse_args(args):
-    return args[1], args[2]
+    return args[1]
 
 
 def read_returns(path):
@@ -26,12 +27,12 @@ def read_returns(path):
     return res
 
 
-def plot(data, description):
+def plot(data):
     draw(data)
     draw(convolve(data, len(data)//100))
     plt.xlabel("Episodes")
     plt.ylabel("Returns")
-    plt.title(description)
+    plt.title(TITLE)
 
 
 def draw(data):
