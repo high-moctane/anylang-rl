@@ -68,7 +68,7 @@ impl Cartpole {
         let fps: u32 = config.get("ENV_FPS")?.parse()?;
         let tau = 1. / fps as f64;
 
-        let init_state = [0., PI / 3., 0., 0.];
+        let init_state = [0., PI, 0., 0.];
         // let init_state = (PI, 0.);
         let s = init_state.clone();
 

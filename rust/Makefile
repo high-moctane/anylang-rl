@@ -1,11 +1,11 @@
-TIME = /usr/bin/time -p
-WC = /usr/bin/wc
-TAIL = /usr/bin/tail
-NULL = /dev/null
-PYTHON = /usr/local/bin/python3
-CARGO = $(HOME)/.cargo/bin/cargo
-RUSTC = $(HOME)/.cargo/bin/rustc
-BINARY = target/release/rust
+TIME := /usr/bin/time -p
+WC := /usr/bin/wc
+TAIL := /usr/bin/tail
+NULL := /dev/null
+PYTHON := /usr/local/bin/python3
+CARGO := $(HOME)/.cargo/bin/cargo
+RUSTC := $(HOME)/.cargo/bin/rustc
+PROG := target/release/rust
 
 .PHONY: build \
 	clean \
@@ -46,7 +46,7 @@ fig: maze_qlearning_fig maze_sarsa_fig cartpole_qlearning_fig cartpole_sarsa_fig
 
 maze_qlearning:
 	mkdir -p results/maze_qlearning
-	$(TIME) $(BINARY) ../_settings/maze_qlearning.env 2> results/maze_qlearning/time.txt
+	$(TIME) $(PROG) ../_settings/maze_qlearning.env 2> results/maze_qlearning/time.txt
 
 maze_qlearning_fig: results/maze_qlearning/route.txt results/maze_qlearning/returns.png
 
@@ -58,7 +58,7 @@ results/maze_qlearning/returns.png: results/maze_qlearning/returns.txt
 
 maze_sarsa:
 	mkdir -p results/maze_sarsa
-	$(TIME) $(BINARY) ../_settings/maze_sarsa.env 2> results/maze_sarsa/time.txt
+	$(TIME) $(PROG) ../_settings/maze_sarsa.env 2> results/maze_sarsa/time.txt
 
 maze_sarsa_fig: results/maze_sarsa/route.txt results/maze_sarsa/returns.png
 
@@ -70,7 +70,7 @@ results/maze_sarsa/returns.png: results/maze_sarsa/returns.txt
 
 cartpole_qlearning:
 	mkdir -p results/cartpole_qlearning
-	$(TIME) $(BINARY) ../_settings/cartpole_qlearning.env 2> results/cartpole_qlearning/time.txt
+	$(TIME) $(PROG) ../_settings/cartpole_qlearning.env 2> results/cartpole_qlearning/time.txt
 
 cartpole_qlearning_fig: results/cartpole_qlearning/animation.gif results/cartpole_qlearning/returns.png
 
@@ -82,7 +82,7 @@ results/cartpole_qlearning/returns.png: results/cartpole_qlearning/returns.txt
 
 cartpole_sarsa:
 	mkdir -p results/cartpole_sarsa
-	$(TIME) $(BINARY) ../_settings/cartpole_sarsa.env 2> results/cartpole_sarsa/time.txt
+	$(TIME) $(PROG) ../_settings/cartpole_sarsa.env 2> results/cartpole_sarsa/time.txt
 
 cartpole_sarsa_fig: results/cartpole_sarsa/animation.gif results/cartpole_sarsa/returns.png
 

@@ -106,6 +106,12 @@ impl Experiment {
             s2 = self.env.s();
             a2 = self.agent.a(&mut self.q_table, s2);
             r = self.env.r();
+
+            if self.env.is_done() {
+                for i in 0..self.q_table.a_space {
+                    self.q_table.table[s2][i] = 0.;
+                }
+            }
             self.agent.learn(&mut self.q_table, s1, a1, r, s2, a2);
 
             history.push(a1, s2, r, &self.env.info());
