@@ -169,7 +169,7 @@ impl Environment for Cartpole {
     fn r(&self) -> Reward {
         let [x, theta, ..] = self.s;
         if x.abs() > 2. {
-            -100.
+            -2.
         } else {
             -(theta.abs()) + PI / 2. - 0.01 * x.abs()
         }

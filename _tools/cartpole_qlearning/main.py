@@ -4,15 +4,15 @@ import os.path as opath
 import sys
 
 ROOT = opath.join(opath.abspath(opath.dirname(__file__)), "..", "..")
-OUTPUT_PATH = opath.join(ROOT, "_summary", "pendulum_qlearning.png")
+OUTPUT_PATH = opath.join(ROOT, "_summary", "cartpole_qlearning.png")
 
 
 def languages(argv):
     return argv[1:]
 
 
-def language_pendulum_qlearning_path(lang):
-    return opath.join(ROOT, lang, "results", "pendulum_qlearning", "time.txt")
+def language_cartpole_qlearning_path(lang):
+    return opath.join(ROOT, lang, "results", "cartpole_qlearning", "time.txt")
 
 
 def parse_time(path):
@@ -24,10 +24,10 @@ def parse_time(path):
 
 def draw(langs):
     left = np.arange(1, len(langs)+1)
-    paths = list(map(language_pendulum_qlearning_path, langs))
+    paths = list(map(language_cartpole_qlearning_path, langs))
     values = list(map(parse_time, paths))
     plt.bar(left, values, tick_label=langs, align="center")
-    plt.title("Benchmark of Inversed Pendulum (Q-learning)")
+    plt.title("Benchmark of Cartpole (Q-learning)")
 
 
 def save():

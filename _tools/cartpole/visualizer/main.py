@@ -18,15 +18,18 @@ class Visualizer:
         self.tick = 1 / self.frames_per_sec
 
         # 図の出力範囲
-        self.xlim = [-1.5, 1.5]
-        self.ylim = [-1.5, 1.5]
+        self.xlim = [-3, 3]
+        self.ylim = [-3, 3]
 
-        self.text_time_pos = [-1.4, 1.4]
-        self.text_action_pos = [-1.4, 1.3]
-        self.text_theta_pos = [-1.4, 1.2]
-        self.text_thetadot_pos = [-1.4, 1.1]
-        self.text_reward_pos = [-1.4, 1.0]
-        self.text_info_pos = [-1.4, 0.9]
+        self.text_time_pos = [-2.8, 2.8]
+        self.text_action_pos = [-2.8, 2.6]
+        self.text_x_pos = [-2.8, 2.4]
+        self.text_theta_pos = [-2.8, 2.2]
+        self.text_xdot_pos = [-2.8, 2.0]
+        self.text_thetadot_pos = [-2.8, 1.8]
+        self.text_reward_pos = [-2.8, 1.6]
+
+        self.cart_size = (1.0, 0.5)
 
         self.step = 0
         self.time = 0
@@ -67,8 +70,9 @@ class Visualizer:
         s = self.states[self.step]
         r = self.rewards[self.step]
         info = self.info[self.step]
-        self.draw(info)
-        # self.draw_action_arrow(info, a)
+        self.draw_cart(info)
+        self.draw_pole(info)
+        self.draw_action_arrow(info, a)
         self.write_info(a, s, r, info)
         self.time += self.tick
         self.step += 1
@@ -79,18 +83,49 @@ class Visualizer:
         self.ax.set_ylim(*self.ylim)
         self.ax.set_aspect("equal")
 
-    def draw(self, info):
-        x = math.sin(info[0])
-        y = math.cos(info[0])
+    def draw_pole(self, info):
+        x = info[0]
+        y = 0
+        theta = info[1]
 
-        self.ax.plot([0, x], [0, y])
+        tip_x = x + math.sin(theta)
+        tip_y = math.cos(theta)
+
+        self.ax.plot([x, tip_x], [y, tip_y])
+
+    def draw_cart(self, info):
+        x = info[0]
+        left = x - self.cart_size[0]/2
+        right = x + self.cart_size[0]/2
+        bottom = -self.cart_size[1]/2
+        top = self.cart_size[1]/2
+
+        self.ax.hlines(bottom, left, right)
+        self.ax.hlines(top, left, right)
+        self.ax.vlines(left, bottom, top)
+        self.ax.vlines(right, bottom, top)
+
+    def draw_action_arrow(self, info, a):
+        x = info[0]
+        a = float(a)
+        if a == 0:
+            start = [x - self.cart_size[0] / 2, 0]
+            end = [start[0] - 1, 0]
+        else:
+            start = [x + self.cart_size[0] / 2, 0]
+            end = [start[0] + 1, 0]
+
+        self.ax.annotate("", xy=end, xytext=start,
+                         arrowprops=dict(arrowstyle="-|>", facecolor="orange", edgecolor="orange"))
 
     def write_info(self, a, s, r, info):
-        theta, thetadot = info
+        x, theta, xdot, thetadot = info
         self.ax.text(*self.text_time_pos, f"time[s] = {self.time:.3f}")
-        self.ax.text(*self.text_theta_pos, f"theta[rad] = {theta: .3f}")
+        self.ax.text(*self.text_x_pos, f"x [m] = {x: .3f}")
+        self.ax.text(*self.text_theta_pos, f"theta [rad] = {theta: .3f}")
+        self.ax.text(*self.text_xdot_pos, f"xdot [m/s] = {xdot: .3f}")
         self.ax.text(*self.text_thetadot_pos,
-                     f"thetadot[rad/s] = {thetadot: .3f}")
+                     f"thetadot [rad/s] = {thetadot: .3f}")
         self.ax.text(*self.text_action_pos, f"a = {a}")
 
 

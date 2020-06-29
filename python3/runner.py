@@ -1,7 +1,7 @@
 import config
 import experiment
 import environment.maze as maze
-import environment.pendulum as pendulum
+import environment.cartpole as cartpole
 import agent.q_learning as q_learning
 import agent.sarsa as sarsa
 import q_table
@@ -60,7 +60,7 @@ class Runner:
         env_name = self.config.cfg["ENV_NAME"]
         if env_name == "Maze":
             return maze.Maze(self.config)
-        elif env_name == "Pendulum":
-            return pendulum.Pendulum(self.config)
+        elif env_name == "Cartpole":
+            return cartpole.Cartpole(self.config)
         else:
             raise InvalidEnvironmentName(env_name)

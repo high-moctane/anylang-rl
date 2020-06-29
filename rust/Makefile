@@ -6,6 +6,7 @@ PYTHON := /usr/local/bin/python3
 CARGO := $(HOME)/.cargo/bin/cargo
 RUSTC := $(HOME)/.cargo/bin/rustc
 PROG := target/release/rust
+SRCS := $(wildcard src/*.rs) $(wildcard src/*/*.rs)
 
 .PHONY: build \
 	clean \
@@ -26,7 +27,7 @@ results/version.txt:
 	mkdir -p results
 	$(RUSTC) --version > $@
 
-results/time.txt:
+results/time.txt: $(SRCS)
 	$(TIME) $(CARGO) build
 	$(shell $(TIME) $(CARGO) build --release 2>&1 > $(NULL) | $(TAIL) -n 3 > $@)
 

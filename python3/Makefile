@@ -1,6 +1,6 @@
-TIME = /usr/bin/time -p
-WC = /usr/bin/wc
-PYTHON = /usr/local/bin/python3
+TIME := /usr/bin/time -p
+WC := /usr/bin/wc
+PYTHON := /usr/local/bin/python3
 
 .PHONY: build \
 	clean \
@@ -10,10 +10,10 @@ PYTHON = /usr/local/bin/python3
 	maze_qlearning_fig \
 	maze_sarsa \
 	maze_sarsa_fig \
-	pendulum_qlearning \
-	pendulum_qlearning_fig \
-	pendulum_sarsa \
-	pendulum_sarsa_fig
+	cartpole_qlearning \
+	cartpole_qlearning_fig \
+	cartpole_sarsa \
+	cartpole_sarsa_fig
 
 build: results/version.txt results/time.txt results/wc.txt
 
@@ -33,9 +33,9 @@ clean:
 	rm -rf agent/__pycache__
 	rm -rf environment/__pycache__
 
-run: maze_qlearning maze_sarsa pendulum_qlearning pendulum_sarsa
+run: maze_qlearning maze_sarsa cartpole_qlearning cartpole_sarsa
 
-fig: maze_qlearning_fig maze_sarsa_fig pendulum_qlearning_fig pendulum_sarsa_fig
+fig: maze_qlearning_fig maze_sarsa_fig cartpole_qlearning_fig cartpole_sarsa_fig
 
 maze_qlearning:
 	mkdir -p results/maze_qlearning
@@ -61,26 +61,26 @@ results/maze_sarsa/route.txt: results/maze_sarsa/history.tsv
 results/maze_sarsa/returns.png: results/maze_sarsa/returns.txt
 	$(PYTHON) ../_tools/learning_curve/main.py $^
 
-pendulum_qlearning:
-	mkdir -p results/pendulum_qlearning
-	$(TIME) $(PYTHON) main.py ../_settings/pendulum_qlearning.env 2> results/pendulum_qlearning/time.txt
+cartpole_qlearning:
+	mkdir -p results/cartpole_qlearning
+	$(TIME) $(PYTHON) main.py ../_settings/cartpole_qlearning.env 2> results/cartpole_qlearning/time.txt
 
-pendulum_qlearning_fig: results/pendulum_qlearning/animation.gif results/pendulum_qlearning/returns.png
+cartpole_qlearning_fig: results/cartpole_qlearning/animation.gif results/cartpole_qlearning/returns.png
 
-results/pendulum_qlearning/animation.gif: results/pendulum_qlearning/history.tsv
-	$(PYTHON) ../_tools/pendulum/visualizer/main.py $^
+results/cartpole_qlearning/animation.gif: results/cartpole_qlearning/history.tsv
+	$(PYTHON) ../_tools/cartpole/visualizer/main.py $^
 
-results/pendulum_qlearning/returns.png: results/pendulum_qlearning/returns.txt
+results/cartpole_qlearning/returns.png: results/cartpole_qlearning/returns.txt
 	$(PYTHON) ../_tools/learning_curve/main.py $^
 
-pendulum_sarsa:
-	mkdir -p results/pendulum_sarsa
-	$(TIME) $(PYTHON) main.py ../_settings/pendulum_sarsa.env 2> results/pendulum_sarsa/time.txt
+cartpole_sarsa:
+	mkdir -p results/cartpole_sarsa
+	$(TIME) $(PYTHON) main.py ../_settings/cartpole_sarsa.env 2> results/cartpole_sarsa/time.txt
 
-pendulum_sarsa_fig: results/pendulum_sarsa/animation.gif results/pendulum_sarsa/returns.png
+cartpole_sarsa_fig: results/cartpole_sarsa/animation.gif results/cartpole_sarsa/returns.png
 
-results/pendulum_sarsa/animation.gif: results/pendulum_sarsa/history.tsv
-	$(PYTHON) ../_tools/pendulum/visualizer/main.py $^
+results/cartpole_sarsa/animation.gif: results/cartpole_sarsa/history.tsv
+	$(PYTHON) ../_tools/cartpole/visualizer/main.py $^
 
-results/pendulum_sarsa/returns.png: results/pendulum_sarsa/returns.txt
+results/cartpole_sarsa/returns.png: results/cartpole_sarsa/returns.txt
 	$(PYTHON) ../_tools/learning_curve/main.py $^
