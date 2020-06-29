@@ -1,5 +1,7 @@
+MAKEFILE_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
+include $(MAKEFILE_DIR)/include.mk
+
 LANGS = pypy3 python3 rust
-PYTHON = /usr/local/bin/python3
 
 .PHONY: build clean
 

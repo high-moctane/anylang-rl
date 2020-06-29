@@ -1,8 +1,6 @@
-TIME := /usr/bin/time -p
-WC := /usr/bin/wc
-TAIL := /usr/bin/tail
-NULL := /dev/null
-PYTHON := /usr/local/bin/python3
+MAKEFILE_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
+include $(MAKEFILE_DIR)/../include.mk
+
 CARGO := $(HOME)/.cargo/bin/cargo
 RUSTC := $(HOME)/.cargo/bin/rustc
 PROG := target/release/rust

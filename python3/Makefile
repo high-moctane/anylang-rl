@@ -1,6 +1,5 @@
-TIME := /usr/bin/time -p
-WC := /usr/bin/wc
-PYTHON := /usr/local/bin/python3
+MAKEFILE_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
+include $(MAKEFILE_DIR)/../include.mk
 
 .PHONY: build \
 	clean \
