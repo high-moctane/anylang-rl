@@ -2,7 +2,6 @@ use crate::{Action, Reward, State};
 
 pub mod cartpole;
 pub mod maze;
-pub mod pendulum;
 
 pub trait Environment {
     fn s_space(&self) -> usize;

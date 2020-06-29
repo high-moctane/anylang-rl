@@ -4,7 +4,6 @@ use crate::agent::Agent;
 use crate::config::Config;
 use crate::environment::cartpole::Cartpole;
 use crate::environment::maze::Maze;
-use crate::environment::pendulum::Pendulum;
 use crate::environment::Environment;
 use crate::experiment::Experiment;
 use std::env;
