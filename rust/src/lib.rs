@@ -1,7 +1,10 @@
 use crate::agent::q_learning::QLearning;
+use crate::agent::sarsa::Sarsa;
 use crate::agent::Agent;
 use crate::config::Config;
+use crate::environment::cartpole::Cartpole;
 use crate::environment::maze::Maze;
+use crate::environment::pendulum::Pendulum;
 use crate::environment::Environment;
 use crate::experiment::Experiment;
 use std::env;
@@ -51,6 +54,7 @@ impl Runner {
         let agent_name = self.config.get("AGENT_NAME")?;
         match &*agent_name {
             "Q-learning" => Ok(QLearning::new(&self.config)?),
+            "Sarsa" => Ok(Sarsa::new(&self.config)?),
             _ => Err(Box::new(InvalidAgentNameError::new(&agent_name))),
         }
     }
@@ -58,6 +62,7 @@ impl Runner {
     fn choose_environment(&self) -> Result<Box<dyn Environment>, Box<dyn error::Error>> {
         let env_name = self.config.get("ENV_NAME")?;
         match &*env_name {
+            "Cartpole" => Ok(Cartpole::new(&self.config)?),
             "Maze" => Ok(Maze::new(&self.config)?),
             _ => Err(Box::new(InvalidEnvironmentNameError::new(&env_name))),
         }

@@ -2,6 +2,7 @@ use crate::q_table::QTable;
 use crate::{Action, Reward, State};
 
 pub mod q_learning;
+pub mod sarsa;
 
 pub trait Agent {
     fn a(&mut self, q_table: &QTable, s: State) -> Action;

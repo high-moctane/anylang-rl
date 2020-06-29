@@ -23,6 +23,7 @@ impl QTable {
         }
     }
 
+    #[allow(dead_code)]
     pub fn load(path: &str) -> Result<Self, Box<dyn error::Error>> {
         let mut file = File::open(path)?;
         let metadata = fs::metadata(path)?;
