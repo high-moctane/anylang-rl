@@ -6,9 +6,9 @@ SRCS := $(wildcard *.py)
 .PHONY: build \
 		clean \
 		run \
-		$(foreach target,$(TARGETS),run_$(target)) \
+		$(foreach tasks,$(TASKS),run_$(tasks)) \
 		fig \
-		$(foreach target,$(TARGETS),fig_$(target))
+		$(foreach tasks,$(TASKS),fig_$(tasks))
 
 build: results/version.txt results/wc.txt $(PROG) results/build_time.txt ;
 
@@ -28,41 +28,13 @@ clean:
 	rm -rf __pycache__ */__pycache__
 	rm -rf results
 
-run: $(RUN) ;
+run: $(foreach task,$(TASKS),run_$(task)) ;
+
 
 define RUN_TEMPLATE
 run_$(1): $(PROG)
 	@mkdir -p results/$(1)
 	$(TIME) $(PYTHON) main.py ../_config/$(1).env 2> results/$(1)/run_time.txt
 endef
-$(foreach target,$(TARGETS),$(eval $(call RUN_TEMPLATE,$(target))))
 
-fig: $(FIG) ;
-
-define FIG_MAZE_TEMPLATE
-fig_$(1): results/$(1)/learning_curve.png results/$(1)/route.txt ;
-endef
-$(foreach target,$(MAZE),$(eval $(call FIG_MAZE_TEMPLATE,$(target))))
-
-define LEARNING_CURVE
-results/$(1)/learning_curve.png: results/$(1)/returns.txt
-	$(PYTHON) ../_plotter/learning_curve/main.py results/$(1)/returns.txt
-endef
-$(foreach target,$(TARGETS),$(eval $(call LEARNING_CURVE,$(target))))
-
-define ROUTE_TEMPLATE
-results/$(1)/route.txt: results/$(1)/history.tsv
-	$(PYTHON) ../_plotter/maze/main.py results/$(1)/history.tsv > results/$(1)/route.txt
-endef
-$(foreach target,$(TARGETS),$(eval $(call ROUTE_TEMPLATE,$(target))))
-
-define FIG_CARTPOLE_TEMPLATE
-fig_$(1): results/$(1)/learning_curve.png results/$(1)/animation.gif ;
-endef
-$(foreach target,$(CARTPOLE),$(eval $(call FIG_CARTPOLE_TEMPLATE,$(target))))
-
-define ANIMATION_TEMPLATE
-results/$(1)/animation.gif: results/$(1)/history.tsv
-	$(PYTHON) ../_plotter/cartpole/main.py results/$(1)/history.tsv
-endef
-$(foreach target,$(CARTPOLE),$(eval $(call ANIMATION_TEMPLATE,$(target))))
+$(foreach tasks,$(TASKS),$(eval $(call RUN_TEMPLATE,$(tasks))))

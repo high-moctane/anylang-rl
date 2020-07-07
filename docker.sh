@@ -1,13 +1,13 @@
 #!/bin/bash
 
 SCRIPT_DIR=$(cd $(dirname $0); pwd)
-IMAGE_TAG=anylang-rl-rust_rustc
+IMAGE_TAG=anylang-rl
 
 docker build -t ${IMAGE_TAG} .
 docker run \
     --rm \
     -it \
-    --mount type=bind,src=${SCRIPT_DIR}/../,dst=/anylang-rl \
-    -w /anylang-rl/Rust_rustc \
+    --mount type=bind,src=${SCRIPT_DIR},dst=/anylang-rl \
+    -w /anylang-rl \
     ${IMAGE_TAG} \
     ${@}
