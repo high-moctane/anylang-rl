@@ -30,7 +30,7 @@ type Maze struct {
 }
 
 func NewMaze(config *Config) (*Maze, error) {
-	mazePath, err := config.Get("ENVIRONMENT_MAZE_PATH")
+	mazePath, err := config.Get("ENV_MAZE_PATH")
 	if err != nil {
 		return nil, fmt.Errorf("new maze error: %w", err)
 	}
@@ -41,17 +41,17 @@ func NewMaze(config *Config) (*Maze, error) {
 	height := len(maze)
 	width := len(maze[0])
 
-	defaultReward, err := config.GetAsFloat64("ENVIRONMENT_DEFAULT_REWARD")
+	defaultReward, err := config.GetAsFloat64("ENV_DEFAULT_REWARD")
 	if err != nil {
 		return nil, fmt.Errorf("new maze error: %w", err)
 	}
 
-	goalReward, err := config.GetAsFloat64("ENVIRONMENT_GOAL_REWARD")
+	goalReward, err := config.GetAsFloat64("ENV_GOAL_REWARD")
 	if err != nil {
 		return nil, fmt.Errorf("new maze error: %w", err)
 	}
 
-	wallReward, err := config.GetAsFloat64("ENVIRONMENT_WALL_REWARD")
+	wallReward, err := config.GetAsFloat64("ENV_WALL_REWARD")
 	if err != nil {
 		return nil, fmt.Errorf("new maze error: %w", err)
 	}
@@ -156,93 +156,93 @@ type Cartpole struct {
 }
 
 func NewCartpole(config *Config) (*Cartpole, error) {
-	aLeft, err := config.GetAsFloat64("ENVIRONMENT_ACTION_LEFT")
+	aLeft, err := config.GetAsFloat64("ENV_ACTION_LEFT")
 	if err != nil {
 		return nil, fmt.Errorf("new cartpole error: %w", err)
 	}
-	aRight, err := config.GetAsFloat64("ENVIRONMENT_ACTION_RIGHT")
+	aRight, err := config.GetAsFloat64("ENV_ACTION_RIGHT")
 	if err != nil {
 		return nil, fmt.Errorf("new cartpole error: %w", err)
 	}
 	actions := []float64{aLeft, aRight}
 
-	xLeft, err := config.GetAsFloat64("ENVIRONMENT_X_LEFT")
+	xLeft, err := config.GetAsFloat64("ENV_X_LEFT")
 	if err != nil {
 		return nil, fmt.Errorf("new cartpole error: %w", err)
 	}
-	xRight, err := config.GetAsFloat64("ENVIRONMENT_X_RIGHT")
+	xRight, err := config.GetAsFloat64("ENV_X_RIGHT")
 	if err != nil {
 		return nil, fmt.Errorf("new cartpole error: %w", err)
 	}
 	xBounds := [2]float64{xLeft, xRight}
 
-	thetaLeft, err := config.GetAsFloat64("ENVIRONMENT_THETA_LEFT")
+	thetaLeft, err := config.GetAsFloat64("ENV_THETA_LEFT")
 	if err != nil {
 		return nil, fmt.Errorf("new cartpole error: %w", err)
 	}
-	thetaRight, err := config.GetAsFloat64("ENVIRONMENT_THETA_RIGHT")
+	thetaRight, err := config.GetAsFloat64("ENV_THETA_RIGHT")
 	if err != nil {
 		return nil, fmt.Errorf("new cartpole error: %w", err)
 	}
 	thetaBounds := [2]float64{thetaLeft, thetaRight}
 
-	xDotLeft, err := config.GetAsFloat64("ENVIRONMENT_XDOT_LEFT")
+	xDotLeft, err := config.GetAsFloat64("ENV_XDOT_LEFT")
 	if err != nil {
 		return nil, fmt.Errorf("new cartpole error: %w", err)
 	}
-	xDotRight, err := config.GetAsFloat64("ENVIRONMENT_XDOT_RIGHT")
+	xDotRight, err := config.GetAsFloat64("ENV_XDOT_RIGHT")
 	if err != nil {
 		return nil, fmt.Errorf("new cartpole error: %w", err)
 	}
 	xDotBounds := [2]float64{xDotLeft, xDotRight}
 
-	thetaDotLeft, err := config.GetAsFloat64("ENVIRONMENT_THETADOT_LEFT")
+	thetaDotLeft, err := config.GetAsFloat64("ENV_THETADOT_LEFT")
 	if err != nil {
 		return nil, fmt.Errorf("new cartpole error: %w", err)
 	}
-	thetaDotRight, err := config.GetAsFloat64("ENVIRONMENT_THETADOT_RIGHT")
+	thetaDotRight, err := config.GetAsFloat64("ENV_THETADOT_RIGHT")
 	if err != nil {
 		return nil, fmt.Errorf("new cartpole error: %w", err)
 	}
 	thetaDotBounds := [2]float64{thetaDotLeft, thetaDotRight}
 
-	xSize, err := config.GetAsInt("ENVIRONMENT_X_SIZE")
+	xSize, err := config.GetAsInt("ENV_X_SIZE")
 	if err != nil {
 		return nil, fmt.Errorf("new cartpole error: %w", err)
 	}
-	thetaSize, err := config.GetAsInt("ENVIRONMENT_THETA_SIZE")
+	thetaSize, err := config.GetAsInt("ENV_THETA_SIZE")
 	if err != nil {
 		return nil, fmt.Errorf("new cartpole error: %w", err)
 	}
-	xDotSize, err := config.GetAsInt("ENVIRONMENT_XDOT_SIZE")
+	xDotSize, err := config.GetAsInt("ENV_XDOT_SIZE")
 	if err != nil {
 		return nil, fmt.Errorf("new cartpole error: %w", err)
 	}
-	thetaDotSize, err := config.GetAsInt("ENVIRONMENT_THETADOT_SIZE")
+	thetaDotSize, err := config.GetAsInt("ENV_THETADOT_SIZE")
 	if err != nil {
 		return nil, fmt.Errorf("new cartpole error: %w", err)
 	}
 
-	g, err := config.GetAsFloat64("ENVIRONMENT_GRAVITY")
+	g, err := config.GetAsFloat64("ENV_GRAVITY")
 	if err != nil {
 		return nil, fmt.Errorf("new cartpole error: %w", err)
 	}
-	cartMass, err := config.GetAsFloat64("ENVIRONMENT_CART_MASS")
+	cartMass, err := config.GetAsFloat64("ENV_CART_MASS")
 	if err != nil {
 		return nil, fmt.Errorf("new cartpole error: %w", err)
 	}
-	m, err := config.GetAsFloat64("ENVIRONMENT_POLE_MASS")
+	m, err := config.GetAsFloat64("ENV_POLE_MASS")
 	if err != nil {
 		return nil, fmt.Errorf("new cartpole error: %w", err)
 	}
-	l, err := config.GetAsFloat64("ENVIRONMENT_POLE_LENGTH")
+	l, err := config.GetAsFloat64("ENV_POLE_LENGTH")
 	if err != nil {
 		return nil, fmt.Errorf("new cartpole error: %w", err)
 	}
 	ml := m * l
 	mass := cartMass + m
 
-	fps, err := config.GetAsInt("ENVIRONMENT_FRAME_PER_SECOND")
+	fps, err := config.GetAsInt("ENV_FRAME_PER_SECOND")
 	if err != nil {
 		return nil, fmt.Errorf("new cartpole error: %w", err)
 	}

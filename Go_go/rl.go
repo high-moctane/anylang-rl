@@ -21,16 +21,16 @@ type RL struct {
 }
 
 func NewRL(config *Config) (*RL, error) {
-	returnsPath, err := config.Get("REINFORCEMENT_LEARNING_RETURNS_PATH")
+	returnsPath, err := config.Get("RL_RETURNS_PATH")
 	if err != nil {
 		return nil, fmt.Errorf("new rl error: %w", err)
 	}
-	testHistoryPath, err := config.Get("REINFORCEMENT_LEARNING_TEST_HISTORY_PATH")
+	testHistoryPath, err := config.Get("RL_TEST_HISTORY_PATH")
 	if err != nil {
 		return nil, fmt.Errorf("new rl error: %w", err)
 	}
 
-	maxEpisodeStr, err := config.Get("REINFORCEMENT_LEARNING_MAX_EPISODE")
+	maxEpisodeStr, err := config.Get("RL_MAX_EPISODE")
 	if err != nil {
 		return nil, fmt.Errorf("new rl error: %w", err)
 	}
@@ -39,7 +39,7 @@ func NewRL(config *Config) (*RL, error) {
 		return nil, fmt.Errorf("new rl error: %w", err)
 	}
 
-	maxStepStr, err := config.Get("REINFORCEMENT_LEARNING_MAX_STEP")
+	maxStepStr, err := config.Get("RL_MAX_STEP")
 	if err != nil {
 		return nil, fmt.Errorf("new rl error: %w", err)
 	}
@@ -105,7 +105,7 @@ func chooseAgent(config *Config) (Agent, error) {
 }
 
 func chooseEnvironment(config *Config) (Environment, error) {
-	envName, err := config.Get("ENVIRONMENT_NAME")
+	envName, err := config.Get("ENV_NAME")
 	if err != nil {
 		return nil, fmt.Errorf("choose environment error: %w", err)
 	}

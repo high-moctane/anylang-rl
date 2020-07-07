@@ -31,11 +31,11 @@ pub struct RL {
 
 impl RL {
     pub fn new(config: &Config) -> Result<RL, Box<dyn Error>> {
-        let returns_path = config.get("REINFORCEMENT_LEARNING_RETURNS_PATH")?;
-        let test_history_path = config.get("REINFORCEMENT_LEARNING_TEST_HISTORY_PATH")?;
+        let returns_path = config.get("RL_RETURNS_PATH")?;
+        let test_history_path = config.get("RL_TEST_HISTORY_PATH")?;
 
-        let max_episode = config.get("REINFORCEMENT_LEARNING_MAX_EPISODE")?.parse()?;
-        let max_step = config.get("REINFORCEMENT_LEARNING_MAX_STEP")?.parse()?;
+        let max_episode = config.get("RL_MAX_EPISODE")?.parse()?;
+        let max_step = config.get("RL_MAX_STEP")?.parse()?;
 
         let agent = RL::choose_agent(&config)?;
         let env = RL::choose_environment(&config)?;
@@ -69,7 +69,7 @@ impl RL {
     }
 
     fn choose_environment(config: &Config) -> Result<Box<dyn Environment>, Box<dyn Error>> {
-        let env_name = config.get("ENVIRONMENT_NAME")?;
+        let env_name = config.get("ENV_NAME")?;
         match env_name.as_str() {
             "Cartpole" => Ok(Box::new(Cartpole::new(&config)?)),
             "Maze" => Ok(Box::new(Maze::new(&config)?)),

@@ -32,40 +32,40 @@ pub struct Cartpole {
 impl Cartpole {
     pub fn new(config: &Config) -> Result<Cartpole, Box<dyn error::Error>> {
         let actions = vec![
-            config.get("ENVIRONMENT_ACTION_LEFT")?.parse()?,
-            config.get("ENVIRONMENT_ACTION_RIGHT")?.parse()?,
+            config.get("ENV_ACTION_LEFT")?.parse()?,
+            config.get("ENV_ACTION_RIGHT")?.parse()?,
         ];
 
         let x_bounds = [
-            config.get("ENVIRONMENT_X_LEFT")?.parse()?,
-            config.get("ENVIRONMENT_X_RIGHT")?.parse()?,
+            config.get("ENV_X_LEFT")?.parse()?,
+            config.get("ENV_X_RIGHT")?.parse()?,
         ];
         let theta_bounds = [
-            config.get("ENVIRONMENT_THETA_LEFT")?.parse()?,
-            config.get("ENVIRONMENT_THETA_RIGHT")?.parse()?,
+            config.get("ENV_THETA_LEFT")?.parse()?,
+            config.get("ENV_THETA_RIGHT")?.parse()?,
         ];
         let xdot_bounds = [
-            config.get("ENVIRONMENT_XDOT_LEFT")?.parse()?,
-            config.get("ENVIRONMENT_XDOT_RIGHT")?.parse()?,
+            config.get("ENV_XDOT_LEFT")?.parse()?,
+            config.get("ENV_XDOT_RIGHT")?.parse()?,
         ];
         let thetadot_bounds = [
-            config.get("ENVIRONMENT_THETADOT_LEFT")?.parse()?,
-            config.get("ENVIRONMENT_THETADOT_RIGHT")?.parse()?,
+            config.get("ENV_THETADOT_LEFT")?.parse()?,
+            config.get("ENV_THETADOT_RIGHT")?.parse()?,
         ];
 
-        let x_size = config.get("ENVIRONMENT_X_SIZE")?.parse()?;
-        let theta_size = config.get("ENVIRONMENT_THETA_SIZE")?.parse()?;
-        let xdot_size = config.get("ENVIRONMENT_XDOT_SIZE")?.parse()?;
-        let thetadot_size = config.get("ENVIRONMENT_THETADOT_SIZE")?.parse()?;
+        let x_size = config.get("ENV_X_SIZE")?.parse()?;
+        let theta_size = config.get("ENV_THETA_SIZE")?.parse()?;
+        let xdot_size = config.get("ENV_XDOT_SIZE")?.parse()?;
+        let thetadot_size = config.get("ENV_THETADOT_SIZE")?.parse()?;
 
-        let g = config.get("ENVIRONMENT_GRAVITY")?.parse()?;
-        let cartmass: f64 = config.get("ENVIRONMENT_CART_MASS")?.parse()?;
-        let m = config.get("ENVIRONMENT_POLE_MASS")?.parse()?;
-        let l = config.get("ENVIRONMENT_POLE_LENGTH")?.parse()?;
+        let g = config.get("ENV_GRAVITY")?.parse()?;
+        let cartmass: f64 = config.get("ENV_CART_MASS")?.parse()?;
+        let m = config.get("ENV_POLE_MASS")?.parse()?;
+        let l = config.get("ENV_POLE_LENGTH")?.parse()?;
         let ml = m * l;
         let mass = cartmass + m;
 
-        let fps: u32 = config.get("ENVIRONMENT_FRAME_PER_SECOND")?.parse()?;
+        let fps: u32 = config.get("ENV_FRAME_PER_SECOND")?.parse()?;
         let tau = 1. / fps as f64;
 
         let init_state = [0., PI, 0., 0.];

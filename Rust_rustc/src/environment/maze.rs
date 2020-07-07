@@ -22,15 +22,15 @@ pub struct Maze {
 
 impl Maze {
     pub fn new(config: &Config) -> Result<Maze, Box<dyn Error>> {
-        let maze = Maze::open_maze(&config.get("ENVIRONMENT_MAZE_PATH")?)?;
+        let maze = Maze::open_maze(&config.get("ENV_MAZE_PATH")?)?;
         let height = maze.len();
         let width = maze[0].len();
 
         let default_reward = config
-            .get("ENVIRONMENT_DEFAULT_REWARD")?
+            .get("ENV_DEFAULT_REWARD")?
             .parse::<Reward>()?;
-        let goal_reward = config.get("ENVIRONMENT_GOAL_REWARD")?.parse::<Reward>()?;
-        let wall_reward = config.get("ENVIRONMENT_WALL_REWARD")?.parse::<Reward>()?;
+        let goal_reward = config.get("ENV_GOAL_REWARD")?.parse::<Reward>()?;
+        let wall_reward = config.get("ENV_WALL_REWARD")?.parse::<Reward>()?;
 
         let init_pos = (1, 1);
         let goal_pos = (height - 2, width - 2);
