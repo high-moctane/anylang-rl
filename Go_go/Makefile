@@ -2,73 +2,70 @@ MAKEFILE_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 include $(MAKEFILE_DIR)/../include.mk
 
 GO := /usr/local/go/bin/go
+
 SRCS := $(wildcard *.go)
-PROG := ./main
+PROG := main
 
 .PHONY: build \
 		clean \
 		run \
+		$(foreach target,$(TARGETS),run_$(target)) \
 		fig \
-		run_maze_qlearning \
-		fig_maze_qlearning \
-		run_maze_sarsa \
-		fig_maze_sarsa \
-		run_cartpole_qlearning \
-		fig_cartpole_qlearning
+		$(foreach target,$(TARGETS),fig_$(target))
 
-build: $(PROG) results/version.txt results/lines.txt
+build: results/version.txt results/wc.txt $(PROG) results/build_time.txt ;
 
 results/version.txt:
 	@mkdir -p results
 	$(GO) version > $@
 
-results/lines.txt: $(SRCS)
+results/wc.txt: $(SRCS)
 	@mkdir -p results
-	$(WC) *.go > $@
+	$(WC) $(SRCS) > $@
 
 $(PROG) results/build_time.txt: $(SRCS)
 	@mkdir -p results
 	$(TIME) $(GO) build -o $(PROG) 2> results/build_time.txt
 
 clean:
-	rm -rf $(PROG) results
+	rm -rf $(PROG)
+	rm -rf results
 
-run: run_maze_qlearning run_maze_sarsa run_cartpole_qlearning
+run: $(RUN) ;
 
-fig: fig_maze_qlearning fig_maze_sarsa fig_cartpole_qlearning
+define RUN_TEMPLATE
+run_$(1): $(PROG)
+	@mkdir -p results/$(1)
+	$(TIME) ./$(PROG) ../_config/$(1).env 2> results/$(1)/run_time.txt
+endef
+$(foreach target,$(TARGETS),$(eval $(call RUN_TEMPLATE,$(target))))
 
-run_maze_qlearning: $(PROG)
-	@mkdir -p results/maze_qlearning
-	$(TIME) $(PROG) ../_config/maze_qlearning.env 2> results/maze_qlearning/run_time.txt
+fig: $(FIG) ;
 
-fig_maze_qlearning: results/maze_qlearning/route.txt results/maze_qlearning/returns.png
+define FIG_MAZE_TEMPLATE
+fig_$(1): results/$(1)/learning_curve.png results/$(1)/route.txt ;
+endef
+$(foreach target,$(MAZE),$(eval $(call FIG_MAZE_TEMPLATE,$(target))))
 
-results/maze_qlearning/route.txt: results/maze_qlearning/history.tsv
-	$(PYTHON) ../_plotter/maze/main.py $^ > $@
+define LEARNING_CURVE
+results/$(1)/learning_curve.png: results/$(1)/returns.txt
+	$(PYTHON) ../_plotter/learning_curve/main.py results/$(1)/returns.txt
+endef
+$(foreach target,$(TARGETS),$(eval $(call LEARNING_CURVE,$(target))))
 
-results/maze_qlearning/returns.png: results/maze_qlearning/returns.txt
-	$(PYTHON) ../_plotter/learning_curve/main.py $^
+define ROUTE_TEMPLATE
+results/$(1)/route.txt: results/$(1)/history.tsv
+	$(PYTHON) ../_plotter/maze/main.py results/$(1)/history.tsv > results/$(1)/route.txt
+endef
+$(foreach target,$(TARGETS),$(eval $(call ROUTE_TEMPLATE,$(target))))
 
-run_maze_sarsa: $(PROG)
-	@mkdir -p results/maze_sarsa
-	$(TIME) $(PROG) ../_config/maze_sarsa.env 2> results/maze_sarsa/run_time.txt
+define FIG_CARTPOLE_TEMPLATE
+fig_$(1): results/$(1)/learning_curve.png results/$(1)/animation.gif ;
+endef
+$(foreach target,$(CARTPOLE),$(eval $(call FIG_CARTPOLE_TEMPLATE,$(target))))
 
-fig_maze_sarsa: results/maze_sarsa/route.txt results/maze_sarsa/returns.png
-
-results/maze_sarsa/route.txt: results/maze_sarsa/history.tsv
-	$(PYTHON) ../_plotter/maze/main.py $^ > $@
-
-results/maze_sarsa/returns.png: results/maze_sarsa/returns.txt
-	$(PYTHON) ../_plotter/learning_curve/main.py $^
-
-run_cartpole_qlearning: $(PROG)
-	@mkdir -p results/cartpole_qlearning
-	$(TIME) $(PROG) ../_config/cartpole_qlearning.env 2> results/cartpole_qlearning/run_time.txt
-
-fig_cartpole_qlearning: results/cartpole_qlearning/animation.gif results/cartpole_qlearning/returns.png
-
-results/cartpole_qlearning/animation.gif: results/cartpole_qlearning/history.tsv
-	$(PYTHON) ../_plotter/cartpole/main.py $^
-
-results/cartpole_qlearning/returns.png: results/cartpole_qlearning/returns.txt
-	$(PYTHON) ../_plotter/learning_curve/main.py $^
+define ANIMATION_TEMPLATE
+results/$(1)/animation.gif: results/$(1)/history.tsv
+	$(PYTHON) ../_plotter/cartpole/main.py results/$(1)/history.tsv
+endef
+$(foreach target,$(CARTPOLE),$(eval $(call ANIMATION_TEMPLATE,$(target))))
