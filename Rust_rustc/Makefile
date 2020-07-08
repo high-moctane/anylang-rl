@@ -37,7 +37,7 @@ run: $(foreach task,$(TASKS),run_$(task)) ;
 
 
 define RUN_TEMPLATE
-run_$(1): $(PROG)
+run_$(1):
 	@mkdir -p results/$(1)
 	$(TIME) ./$(PROG) ../_config/$(1).env 2> results/$(1)/run_time.txt
 endef
