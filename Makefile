@@ -6,27 +6,28 @@ LANGS := Go_go \
 		Python3_PyPy3 \
 		Rust_rustc
 
-JOBS=1
-
 .PHONY: build \
 		run \
+		$(foreach lang,$(LANGS),$(foreach task,$(TASKS),run_$(lang)_$(task))) \
 		fig \
 		$(foreach lang,$(LANGS),$(foreach task,$(TASKS),fig_$(lang)_$(task)))
 
-define DOCKER_SH
-	cd $(1) && ./docker.sh make $(2) -j$(JOBS)
+build:
+	$(foreach lang,$(LANGS),cd $(lang) && ./docker.sh make build && cd .. &&) true
 
+run: $(foreach lang,$(LANGS),$(foreach task,$(TASKS),run_$(lang)_$(task)))
+
+
+define RUN_TEMPLATE
+run_$(1)_$(2):
+	cd $(1) && ./docker.sh make run_$(2)
 endef
 
-build:
-	$(foreach lang,$(LANGS),$(call DOCKER_SH,$(lang),build))
-
-run:
-	$(foreach lang,$(LANGS),$(call DOCKER_SH,$(lang),run))
+$(foreach lang,$(LANGS),$(foreach task,$(TASKS),$(eval $(call RUN_TEMPLATE,$(lang),$(task)))))
 
 clean:
 	rm -rf _summary
-	$(foreach lang,$(LANGS),$(call DOCKER_SH,$(lang),clean))
+	$(foreach lang,$(LANGS),cd $(lang) && ./docker.sh make clean && cd .. &&) true
 
 fig: _summary/build_time.png _summary/build_time.txt \
 		_summary/run_time.png _summary/run_time.txt \
