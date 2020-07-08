@@ -8,9 +8,7 @@ SRCS := $(wildcard *.py)
 .PHONY: build \
 		clean \
 		run \
-		$(foreach task,$(TASKS),run_$(task)) \
-		fig \
-		$(foreach task,$(TASKS),fig_$(task))
+		$(foreach task,$(TASKS),run_$(task))
 
 build: results/version.txt results/wc.txt $(PROG) results/build_time.txt ;
 
