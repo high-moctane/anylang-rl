@@ -1,7 +1,8 @@
 MAKEFILE_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 include $(MAKEFILE_DIR)/include.mk
 
-LANGS := Go_go \
+LANGS := C_GCC \
+		Go_go \
 		Python3_CPython \
 		Python3_PyPy3 \
 		Rust_rustc
