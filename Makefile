@@ -48,7 +48,7 @@ _summary/build_time.png: $(foreach lang,$(LANGS),$(lang)/results/build_time.txt)
 		echo "" >> _summary/build_time.txt; \
 	done
 
-_summary/run_memory.png:
+_summary/run_memory.png: $(foreach lang,$(LANGS),$(lang)/results/cartpole_qlearning/run_time.txt)
 	@mkdir -p _summary
 	$(PYTHON) _plotter/run_memory/main.py $(LANGS)
 	for lang in $(LANGS); do \
@@ -57,7 +57,7 @@ _summary/run_memory.png:
 		echo "" >> _summary/run_memory.txt; \
 	done
 
-_summary/run_time.png:
+_summary/run_time.png: $(foreach lang,$(LANGS),$(lang)/results/cartpole_qlearning/run_time.txt)
 	@mkdir -p _summary
 	$(PYTHON) _plotter/run_time/main.py $(LANGS)
 	for lang in $(LANGS); do \
