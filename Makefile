@@ -5,6 +5,7 @@ LANGS := C_GCC \
 		Go_go \
 		Python3_CPython \
 		Python3_PyPy3 \
+		Ruby_MRI \
 		Rust_rustc
 
 .PHONY: build \
