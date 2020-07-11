@@ -3,7 +3,7 @@ include $(MAKEFILE_DIR)/../include.mk
 
 PYPY := /usr/local/pypy3/bin/pypy3
 
-SRCS := $(wildcard *.py)
+SRCS := $(wildcard *.py) $(wildcard */*.py)
 
 .PHONY: build \
 		clean \

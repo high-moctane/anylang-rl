@@ -1,7 +1,7 @@
 MAKEFILE_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 include $(MAKEFILE_DIR)/../include.mk
 
-SRCS := $(wildcard *.py)
+SRCS := $(wildcard *.py) $(wildcard */*.py)
 
 .PHONY: build \
 		clean \
