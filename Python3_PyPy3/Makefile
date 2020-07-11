@@ -1,7 +1,7 @@
 MAKEFILE_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 include $(MAKEFILE_DIR)/../include.mk
 
-PYPY := /usr/local/pypy3/bin/pypy3
+PYPY := /opt/pypy/bin/pypy3
 
 SRCS := $(wildcard *.py) $(wildcard */*.py)
 
