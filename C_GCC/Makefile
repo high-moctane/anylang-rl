@@ -36,7 +36,7 @@ $(PROG) results/build_time.txt: $(SRCS)
 clean:
 	rm -rf $(PROG)
 	rm -rf results
-	rm ./*.dSYM
+	rm -rf ./*.dSYM
 	rm -rf SFMT
 
 run: $(foreach task,$(TASKS),run_$(task))
